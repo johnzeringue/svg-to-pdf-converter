@@ -38,7 +38,7 @@ public class SVGToPDFConverter extends DefaultHandler {
     // The formatting string for a PDF catalog object
     public final static String PDF_CATALOG_FORMAT = ""
             + "  <</Type /Catalog\n"
-            + "    /Pages [" + PDF_REFERENCE_FORMAT + "]>>";
+            + "    /Pages " + PDF_REFERENCE_FORMAT + ">>";
     // The formatting string for a PDF trailer
     public final static String PDF_TRAILER_FORMAT = ""
             + "trailer\n"
