@@ -8,7 +8,7 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="SVG_To_PDF_Converter" default="default" basedir=".">
-    <description>Builds, tests, and runs the project SVG_To_PDF_Converter.</description>
+    <description>Builds, tests, and runs the project SVG To PDF Converter.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
