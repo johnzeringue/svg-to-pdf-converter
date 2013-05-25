@@ -9,7 +9,7 @@ import java.util.Locale;
  */
 public class ColorMap {
     private static enum ColorValue {
-        WHITE (new Color(  0,   0,   0)),
+        WHITE (new Color(255, 255, 255)),
         GRAY  (new Color(127, 127, 127)),
         RED   (new Color(255,   0,   0));
         
