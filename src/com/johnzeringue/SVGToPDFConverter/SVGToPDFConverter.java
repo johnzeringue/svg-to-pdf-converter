@@ -18,7 +18,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * to PDFs. However, this functionality is not yet complete.
  *
  * @author John Zeringue
- * @version 04/03/2013
+ * @version 05/25/2013
  */
 public class SVGToPDFConverter extends DefaultHandler {
 
@@ -124,6 +124,8 @@ public class SVGToPDFConverter extends DefaultHandler {
             elementHandlers.push(new RectElementHandler());
         } else if (qName.equalsIgnoreCase("Path")) {
             elementHandlers.push(new PathElementHandler());
+        } else if (qName.equalsIgnoreCase("Line")) {
+            elementHandlers.push(new LineElementHandler());
         } else {
             elementHandlers.push(new ElementHandler());
         }

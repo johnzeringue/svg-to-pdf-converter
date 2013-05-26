@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.util.Locale;
 
 /**
- *
- * @author John
+ * A String to Color map for basic SVG color names
+ * 
+ * @author John Zeringue
+ * @version 05/25/2013
  */
 public class ColorMap {
     private static enum ColorValue {
