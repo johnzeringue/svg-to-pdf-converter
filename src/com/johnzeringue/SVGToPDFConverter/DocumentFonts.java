@@ -4,17 +4,38 @@
  */
 package com.johnzeringue.SVGToPDFConverter;
 
+import java.util.ArrayList;
+
 /**
  * A singleton class for holding font information as it moves from the SVG to
  * the PDF.
  * 
  * @author  John Zeringue
- * @version 04/03/2013
+ * @version 05/25/2013
  */
 public class DocumentFonts {
     private static DocumentFonts instance;
     
-    // Need to implement
+    private ArrayList<String> fonts;
+    
+    public DocumentFonts() {
+        fonts = new ArrayList<>();
+    }
+    
+    public int getFontNumber(String font) {
+        int index = fonts.indexOf(font);
+        
+        if (index != -1) {
+            return index;
+        } else {
+            fonts.add(font);
+            return fonts.size() - 1;
+        }
+    }
+    
+    public ArrayList<String> getFonts() {
+        return fonts;
+    }
     
     /**
      * Returns this class's only instance, creating one if it did not yet exist.
