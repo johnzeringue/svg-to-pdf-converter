@@ -105,7 +105,7 @@ public class RectElementHandler extends ElementHandler {
             textStream += "  b\n"; // Draw Rectangle and finish path
         }
 
-        textStream += "  Q\n"; // Restore the previous graphics state
+        textStream += "  Q"; // Restore the previous graphics state
 
         pdfObject = Formatter.formatAsStream(textStream);
     }

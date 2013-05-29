@@ -166,7 +166,7 @@ public class SVGToPDFConverter extends DefaultHandler {
 
         // See if this ElementHandler has a PDF object and write it if so.
         String pdfObject = elementHandlers.peek().getPDFObject();
-        if (pdfObject != null) {
+        if (pdfObject != null && !pdfObject.equals("")) {
             writePDFObject(pdfObject);
         }
 
@@ -198,16 +198,46 @@ public class SVGToPDFConverter extends DefaultHandler {
         /**
          * Write the page tree
          */
+        /* Write the font information if it exists */
+        int fontsStartIndex = 0;
+        if (DocumentFonts.getInstance().getFonts().size() > 0) {
+            fontsStartIndex = contentsIndex + 1;
+            String fontObject;
+            for (int i = 0; i < DocumentFonts.getInstance().getFonts().size(); i++) {
+                fontObject =
+                        String.format("  <</BaseFont /%s\n    /Subtype /Type1\n    /Type /Font>>",
+                        DocumentFonts.getInstance().getFonts().get(i));
+                writePDFObject(fontObject);
+            }
+        }
+
+        /* Write the resources object */
+        String resourcesObject = "  <<";
+        if (fontsStartIndex > 0) {
+            int fontCount = DocumentFonts.getInstance().getFonts().size();
+            for (int i = 1; i <= fontCount; i++) {
+                resourcesObject +=
+                        String.format("/Font <</F%d %d 0 R>>", i,
+                        fontsStartIndex + i - 1);
+                if (i != fontCount) {
+                    resourcesObject += "\n    ";
+                }
+            }
+        }
+        resourcesObject += ">>";
+        writePDFObject(resourcesObject);
+
         // Write the page object (clean this up!)
         String pageObject = "  <</Type /Page\n";
         pageObject += "    /Contents "
                 + String.format(PDF_REFERENCE_FORMAT, contentsIndex) + "\n";
-        // Add the resources reference here, after I add in fonts
         pageObject += "    /MediaBox ["
                 + DocumentAttributes.getInstance().getValue("viewBox")
                 + "]\n";
         pageObject += "    /Parent "
-                + String.format(PDF_REFERENCE_FORMAT, pdfObjectCount + 2)
+                + String.format(PDF_REFERENCE_FORMAT, pdfObjectCount + 2) + "\n";
+        pageObject += "    /Resources "
+                + String.format(PDF_REFERENCE_FORMAT, pdfObjectCount)
                 + ">>";
         writePDFObject(pageObject);
 
