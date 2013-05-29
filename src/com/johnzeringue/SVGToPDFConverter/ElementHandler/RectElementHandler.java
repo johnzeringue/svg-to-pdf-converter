@@ -1,6 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
-import com.johnzeringue.SVGToPDFConverter.ColorMap;
+import com.johnzeringue.SVGToPDFConverter.Colors;
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import java.awt.Color;
 import org.xml.sax.Attributes;
@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
  * An ElementHandler for Rect elements
  *
  * @author John Zeringue
- * @version 05/25/2013
+ * @version 05/29/2013
  */
 public class RectElementHandler extends ElementHandler {
 
@@ -43,15 +43,25 @@ public class RectElementHandler extends ElementHandler {
         textStream += "  q\n"; // Saves the current graphics state
 
         // Set the fill color
-        String fillColorName;
-        if ((fillColorName = atts.getValue("fill")) == null) {
-            fillColorName = DocumentAttributes.getInstance().getValue("fill");
+        if (atts.getValue("style") != null
+                && atts.getValue("style").contains("fill")) { // If there's a style attribute
+            Color fillColor = Colors.parseRGB(
+                    atts.getValue("style").replaceAll("fill: *", ""));
+            textStream += String.format("  %.2f %.2f %.2f rg\n",
+                    fillColor.getRed() / 255.0,
+                    fillColor.getGreen() / 255.0,
+                    fillColor.getBlue() / 255.0);
+        } else {
+            String fillColorName;
+            if ((fillColorName = atts.getValue("fill")) == null) {
+                fillColorName = DocumentAttributes.getInstance().getValue("fill");
+            }
+            Color fillColor = Colors.get(fillColorName);
+            textStream += String.format("  %.2f %.2f %.2f rg\n",
+                    fillColor.getRed() / 255.0,
+                    fillColor.getGreen() / 255.0,
+                    fillColor.getBlue() / 255.0);
         }
-        Color fillColor = ColorMap.get(fillColorName);
-        textStream += String.format("  %.2f %.2f %.2f rg\n",
-                fillColor.getRed() / 255.0,
-                fillColor.getGreen() / 255.0,
-                fillColor.getBlue() / 255.0);
 
         double x, y, width, height, pageWidth, pageHeight;
         x = Double.parseDouble(atts.getValue("x"));
@@ -65,18 +75,36 @@ public class RectElementHandler extends ElementHandler {
                 x, y, width, height);
 
         // Set the stroke color
-        String strokeColorName;
-        if ((strokeColorName = atts.getValue("stroke")) == null) {
-            strokeColorName = DocumentAttributes.getInstance().getValue("stroke");
+        String strokeValue = "";
+        if (atts.getValue("style") != null
+                && atts.getValue("style").contains("stroke")) { // If there's a style attribute
+            strokeValue = atts.getValue("style").replaceAll(" *stroke: *", "");
+            if (!strokeValue.matches("none.*")) {
+                Color strokeColor = Colors.parseRGB(
+                        atts.getValue("style").replaceAll(" *stroke: *", ""));
+                textStream += String.format("  %.2f %.2f %.2f RG\n",
+                        strokeColor.getRed() / 255.0,
+                        strokeColor.getGreen() / 255.0,
+                        strokeColor.getBlue() / 255.0);
+            }
+        } else {
+            String strokeColorName;
+            if ((strokeColorName = atts.getValue("stroke")) == null) {
+                strokeColorName = DocumentAttributes.getInstance().getValue("stroke");
+            }
+            Color strokeColor = Colors.get(strokeColorName);
+            textStream += String.format("  %.2f %.2f %.2f RG\n",
+                    strokeColor.getRed() / 255.0,
+                    strokeColor.getGreen() / 255.0,
+                    strokeColor.getBlue() / 255.0);
         }
-        Color strokeColor = ColorMap.get(strokeColorName);
-        textStream += String.format("  %.2f %.2f %.2f RG\n",
-                strokeColor.getRed() / 255.0,
-                strokeColor.getGreen() / 255.0,
-                strokeColor.getBlue() / 255.0);
 
-        textStream += "  b\n"; // Draw Rectangle and finish path
-        
+        if (strokeValue.matches("none.*")) {
+            textStream += "  f n\n";
+        } else {
+            textStream += "  b\n"; // Draw Rectangle and finish path
+        }
+
         textStream += "  Q\n"; // Restore the previous graphics state
 
         pdfObject = Formatter.formatAsStream(textStream);

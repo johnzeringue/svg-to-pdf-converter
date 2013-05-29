@@ -1,6 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
-import com.johnzeringue.SVGToPDFConverter.ColorMap;
+import com.johnzeringue.SVGToPDFConverter.Colors;
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import java.awt.Color;
 import org.xml.sax.Attributes;
@@ -8,12 +8,12 @@ import org.xml.sax.SAXException;
 
 /**
  * An element handler for the line SVG tag
- * 
+ *
  * @author John Zeringue
  * @version 05/25/2013
  */
 public class LineElementHandler extends ElementHandler {
-    
+
     /**
      * The parser calls this for each element in a document.
      *
@@ -47,14 +47,14 @@ public class LineElementHandler extends ElementHandler {
         if ((strokeColorName = atts.getValue("stroke")) == null) {
             strokeColorName = DocumentAttributes.getInstance().getValue("stroke");
         }
-        Color strokeColor = ColorMap.get(strokeColorName);
+        Color strokeColor = Colors.get(strokeColorName);
         textStream += String.format("  %.2f %.2f %.2f RG\n",
                 strokeColor.getRed() / 255.0,
                 strokeColor.getGreen() / 255.0,
                 strokeColor.getBlue() / 255.0);
 
         textStream += "  b\n"; // Draw line and finish path
-        
+
         textStream += "  Q\n"; // Restore the previous graphics state
 
         pdfObject = Formatter.formatAsStream(textStream);
