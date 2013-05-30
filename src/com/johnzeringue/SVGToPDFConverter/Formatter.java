@@ -1,4 +1,4 @@
-package com.johnzeringue.SVGToPDFConverter.ElementHandler;
+package com.johnzeringue.SVGToPDFConverter;
 
 /**
  * A class of static methods that format strings into different PDF features.

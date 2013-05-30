@@ -9,7 +9,6 @@ import org.xml.sax.SAXException;
  * uses that code for the style element, then handles page dimensions itself
  *
  * @author John Zeringue
- * @version 04/03/2013
  */
 public class SVGElementHandler extends ElementHandler {
 

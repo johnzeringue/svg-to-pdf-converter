@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.johnzeringue.SVGToPDFConverter;
 
 import java.util.ArrayList;
@@ -11,7 +7,6 @@ import java.util.ArrayList;
  * the PDF.
  * 
  * @author  John Zeringue
- * @version 05/25/2013
  */
 public class DocumentFonts {
     private static DocumentFonts instance;

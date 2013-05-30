@@ -1,5 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter;
 
+import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -10,7 +11,6 @@ import java.util.jar.Attributes;
  * being parsed.
  *
  * @author John Zeringue
- * @version 04/02/2013
  */
 public class DocumentAttributes {
 
@@ -22,10 +22,16 @@ public class DocumentAttributes {
     // instance becuase it provides functionality that the default stack
     // implementation does not.
     private Deque<Attributes> scopes;
+    
+    private int height;
+    private int width;
 
     private DocumentAttributes() {
         attributes = new Attributes();
         scopes = new ArrayDeque<>();
+        
+        height = 0;
+        width = 0;
     }
     
     /**
@@ -62,6 +68,16 @@ public class DocumentAttributes {
      * @param value 
      */
     public void putValue(String name, String value) {
+        // Exceptions for special cases
+        switch (name) {
+            case "height":
+                height = Integer.parseInt(value.replaceAll("px", ""));
+                break;
+            case "width":
+                width = Integer.parseInt(value.replaceAll("px", ""));
+                break;
+        }
+        
         attributes.putValue(name, value);
     }
     
@@ -79,6 +95,22 @@ public class DocumentAttributes {
      */
     public void removeScope() {
         scopes.removeLast();
+    }
+    
+    public int getHeight() {
+        return height;
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    public Color getStroke() {
+        return Colors.get(getValue("stroke"));
+    }
+    
+    public Color getFill() {
+        return Colors.get(getValue("fill"));
     }
     
     /**

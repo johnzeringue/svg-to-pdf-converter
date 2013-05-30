@@ -1,4 +1,6 @@
-package com.johnzeringue.SVGToPDFConverter.ElementHandler;
+package com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler;
+
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.ElementHandler;
 
 /**
  * An ElementHandler for Path elements

@@ -1,5 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
+import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -8,11 +9,16 @@ import org.xml.sax.helpers.DefaultHandler;
  * unimplemented tags.
  * 
  * @author  John Zeringue
- * @version 04/02/2013
  */
 public class ElementHandler extends DefaultHandler {
     // An unwrapped PDF object
     protected String pdfObject;
+    // A local handle for DocumentAttributes
+    protected DocumentAttributes docAtts;
+    
+    public ElementHandler() {
+        docAtts = DocumentAttributes.getInstance();
+    }
     
     /**
      * Returns an "unwrapped" PDF object (no index or obj/endobj tags) or null

@@ -1,7 +1,9 @@
-package com.johnzeringue.SVGToPDFConverter.ElementHandler;
+package com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler;
 
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import com.johnzeringue.SVGToPDFConverter.DocumentFonts;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.ElementHandler;
+import com.johnzeringue.SVGToPDFConverter.Formatter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -9,7 +11,7 @@ import org.xml.sax.SAXException;
  * An ElementHandler for Text elements
  *
  * @author John Zeringue
- * @version 04/02/2013
+ * @version 05/29/2013
  */
 public class TextElementHandler extends ElementHandler {
 

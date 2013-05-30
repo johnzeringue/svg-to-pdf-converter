@@ -1,6 +1,7 @@
 package com.johnzeringue.SVGToPDFConverter;
 
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +19,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * to PDFs. However, this functionality is not yet complete.
  *
  * @author John Zeringue
- * @version 05/25/2013
+ * @version 05/29/2013
  */
 public class SVGToPDFConverter extends DefaultHandler {
 
