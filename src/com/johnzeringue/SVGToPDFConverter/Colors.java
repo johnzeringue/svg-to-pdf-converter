@@ -42,7 +42,7 @@ public class Colors {
                 "\\Argb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)\\z");
         Matcher m;
 
-        if (isColorName(s)) {
+        if (s.matches("\\A\\p{Lower}+\\z")) {
             return ColorValue.valueOf(s.toUpperCase(Locale.ENGLISH)).color();
         } else if ((m = c.matcher(s)).matches()) {
             return new Color(Integer.valueOf(m.group(1)), // r
@@ -51,26 +51,5 @@ public class Colors {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Parses an RGB string (ex. "rgb(1,2,3)") into a Color object.
-     *
-     * @param rgb an RGB string
-     * @return the specified color as a Color object
-     */
-    public static Color parseRGB(String rgb) {
-        Pattern c = Pattern.compile(
-                "rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)");
-        Matcher m = c.matcher(rgb);
-
-        return new Color(Integer.valueOf(m.group(1)), // r
-                Integer.valueOf(m.group(2)), // g
-                Integer.valueOf(m.group(3))); // b 
-    }
-
-    private static boolean isColorName(String s) {
-        // Matches one or more consecutive letters
-        return s.matches("\\A\\p{Lower}+\\z");
     }
 }
