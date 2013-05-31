@@ -52,7 +52,7 @@ public class RectElementHandler extends GraphicsElementHandler {
                     fillColor.getBlue() / 255.0);
             
             // Fill and close the path
-            textStream += "f n\n";
+            textStream += "  f n\n";
         } else { // Assume strokeColor != null
             // Set the stroke color
             textStream += String.format("  %.2f %.2f %.2f RG\n",
@@ -61,7 +61,7 @@ public class RectElementHandler extends GraphicsElementHandler {
                     strokeColor.getBlue() / 255.0);
             
             // Stroke and close the path
-            textStream += "s\n";
+            textStream += "  s\n";
         }
 
         textStream += "  Q"; // Restore the previous graphics state

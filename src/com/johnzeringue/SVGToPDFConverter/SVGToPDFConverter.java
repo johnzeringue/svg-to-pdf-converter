@@ -123,6 +123,8 @@ public class SVGToPDFConverter extends DefaultHandler {
             elementHandlers.push(new TextElementHandler());
         } else if (qName.equalsIgnoreCase("Rect")) {
             elementHandlers.push(new RectElementHandler());
+        } else if (qName.equalsIgnoreCase("Circle")) {
+            elementHandlers.push(new CircleElementHandler());
         } else if (qName.equalsIgnoreCase("Path")) {
             elementHandlers.push(new PathElementHandler());
         } else if (qName.equalsIgnoreCase("Line")) {
