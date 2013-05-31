@@ -1,4 +1,4 @@
-package com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler;
+package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import com.johnzeringue.SVGToPDFConverter.DocumentFonts;

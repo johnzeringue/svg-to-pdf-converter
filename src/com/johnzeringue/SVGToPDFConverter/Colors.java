@@ -16,6 +16,7 @@ public class Colors {
 
         WHITE(new Color(255, 255, 255)),
         GRAY(new Color(127, 127, 127)),
+        BLUE(new Color(0, 0, 255)),
         RED(new Color(255, 0, 0)),
         BLACK(new Color(0, 0, 0)),
         NONE(null);

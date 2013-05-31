@@ -1,5 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter;
 
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.TextElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler.*;
 import java.io.File;

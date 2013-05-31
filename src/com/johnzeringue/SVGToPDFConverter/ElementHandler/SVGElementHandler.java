@@ -15,7 +15,7 @@ public class SVGElementHandler extends ElementHandler {
     // The view box formatting string (<min-x> <min-y> width height)
     private final static String VIEW_BOX_FORMAT = "0 0 %s %s";
     // The default width setting if none is given
-    private final static int DEFAULT_WIDTH = 1200;
+    private final static int DEFAULT_WIDTH = 1073;
     // The default height setting if none is given
     private final static int DEFAULT_HEIGHT = 600;
     // The child GElementHandler

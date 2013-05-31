@@ -57,4 +57,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     public void endElement() {
         
     }
+    
+    protected double invertY(double y) {
+        return docAtts.getHeight() - y;
+    }
 }
