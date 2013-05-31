@@ -183,7 +183,7 @@ public class PathElementHandler extends GraphicsElementHandler {
 
             // Fill and close the path
             textStream += "  f n\n";
-        } else { // Assume strokeColor != null
+        } else if (strokeColor != null) {
             // Set the stroke color
             textStream += String.format("  %.2f %.2f %.2f RG\n",
                     strokeColor.getRed() / 255.0,
@@ -192,6 +192,8 @@ public class PathElementHandler extends GraphicsElementHandler {
 
             // Stroke and close the path
             textStream += "  s\n";
+        } else {
+            textStream += "  n\n";
         }
 
         textStream += "  Q\n";

@@ -1,6 +1,5 @@
 package com.johnzeringue.SVGToPDFConverter;
 
-import com.johnzeringue.SVGToPDFConverter.ElementHandler.TextElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler.*;
 import java.io.File;
@@ -128,6 +127,8 @@ public class SVGToPDFConverter extends DefaultHandler {
             elementHandlers.push(new PathElementHandler());
         } else if (qName.equalsIgnoreCase("Line")) {
             elementHandlers.push(new LineElementHandler());
+        } else if (qName.equalsIgnoreCase("ClipPath")) {
+            elementHandlers.push(new ClipPathElementHandler());
         } else {
             elementHandlers.push(new ElementHandler());
         }

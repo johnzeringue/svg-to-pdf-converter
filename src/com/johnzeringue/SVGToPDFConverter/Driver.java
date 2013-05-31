@@ -31,7 +31,7 @@ public class Driver {
                 UIManager.getSystemLookAndFeelClassName());
 
         // Create a new file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser("./samples");
         fileChooser.setFileFilter(
                 new FileNameExtensionFilter("SVG file", "svg"));
 
