@@ -1,7 +1,10 @@
 package com.johnzeringue.SVGToPDFConverter;
 
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.CircleElementHandler;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.LineElementHandler;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.RectElementHandler;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.PathElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
-import com.johnzeringue.SVGToPDFConverter.ElementHandler.GraphicsElementHandler.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -166,13 +169,14 @@ public class SVGToPDFConverter extends DefaultHandler {
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
+        ElementHandler topElementHandler = elementHandlers.peek();
+        
         // Call endElement for the top element on the stack.
-        elementHandlers.peek().endElement(qName, localName, qName);
+        topElementHandler.endElement(qName, localName, qName);
 
-        // See if this ElementHandler has a PDF object and write it if so.
-        String pdfObject = elementHandlers.peek().getPDFObject();
-        if (pdfObject != null && !pdfObject.equals("")) {
-            writePDFObject(pdfObject);
+        // See if this ElementHandler has PDF object contents and write it if so.
+        if (topElementHandler.hasPDFObjectContents()) {
+            writePDFObject(topElementHandler.getPDFObjectContents());
         }
 
         // Pop the top ElementHandler off of the stack.
@@ -275,10 +279,10 @@ public class SVGToPDFConverter extends DefaultHandler {
      *
      * @param s
      */
-    private void writePDFObject(String pdfObject) {
+    private void writePDFObject(String pdfObjectContents) {
         // Takes the next index (starting from 1) and the object's contents
         String wrappedPDFObject = String.format(PDF_OBJECT_FORMAT,
-                ++pdfObjectCount, pdfObject);
+                ++pdfObjectCount, pdfObjectContents);
 
         // Write the wrapped object
         write(wrappedPDFObject);

@@ -1,9 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
-import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import com.johnzeringue.SVGToPDFConverter.DocumentFonts;
-import com.johnzeringue.SVGToPDFConverter.ElementHandler.ElementHandler;
-import com.johnzeringue.SVGToPDFConverter.Formatter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -37,27 +34,26 @@ public class TextElementHandler extends ElementHandler {
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
         /* Build text object */
-        pdfObject = "BT\n";
+        appendToPDFObjectContents("BT\n");
         String fontFamily = atts.getValue("font-family");
         if (fontFamily == null) {
-            fontFamily = DocumentAttributes.getInstance().getValue("font-family");
+            fontFamily = docAtts.getValue("font-family");
         }
         fontFamily = fontFamily.replaceAll("'", "");
         DocumentFonts.getInstance().getFontNumber(fontFamily);
         Double fontSize;
         if (atts.getValue("font-size") == null) {
-            fontSize = Double.valueOf(DocumentAttributes.getInstance().getValue("font-size"));
+            fontSize = Double.valueOf(docAtts.getValue("font-size"));
         } else {
             fontSize = Double.valueOf(atts.getValue("font-size"));
         }
-        pdfObject += String.format("  0.0 g\n  /F%d %.1f Tf\n",
+        appendToPDFObjectContents(String.format("  0.0 g\n  /F%d %.1f Tf\n",
                 DocumentFonts.getInstance().getFontNumber(fontFamily) + 1,
-                fontSize);
-        int height = Integer.parseInt(
-                DocumentAttributes.getInstance().getValue("height").replaceAll("px", ""));
-        pdfObject += String.format("  %d %d Td\n",
+                fontSize));
+        int height = docAtts.getHeight();
+        appendToPDFObjectContents(String.format("  %d %d Td\n",
                 (int) Double.parseDouble(atts.getValue("x")),
-                height - (int) Double.parseDouble(atts.getValue("y")));
+                height - (int) Double.parseDouble(atts.getValue("y"))));
     }
 
     @Override
@@ -76,10 +72,10 @@ public class TextElementHandler extends ElementHandler {
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
-        pdfObject += String.format("  (%s) Tj\n", tagContents);
-        pdfObject += "ET";
+        appendToPDFObjectContents(String.format("  (%s) Tj\n", tagContents));
+        appendToPDFObjectContents("ET");
 
         /* Write text object to file */
-        pdfObject = Formatter.formatAsStream(pdfObject);
+        formatPDFObjectContentsAsStream();
     }
 }
