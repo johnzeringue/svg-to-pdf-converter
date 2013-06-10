@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -46,14 +48,24 @@ public class SVGToPDFConverter extends DefaultHandler {
     // The formatting string for a PDF trailer
     public final static String PDF_TRAILER_FORMAT = ""
             + "trailer\n"
-            + "  <</Root %d 0 R>>\n\n"
-            + "%%%%EOF";
+            + "  <</Root %d 0 R>>\n\n";
+    public final static String XREF_HEADER_FORMAT = ""
+            + "xref\n"
+            + "0 %d\n"
+            + "0000000000 65535 f\n";
+    public final static String XREF_ENTRY_FORMAT = ""
+            + "%010d 00000 n\n";
     // A PrintWriter printing to the output file
     private PrintWriter outputPrintWriter;
     // The stack of all active ElementHandlers
     private Stack<ElementHandler> elementHandlers;
     // The number of objects that have been written by this converter
     private int pdfObjectCount;
+    // The current character index while writing the PDF
+    private int pdfIndex;
+    private int xrefStart;
+    // The indices of all PDF Objects
+    private List<Integer> pdfObjectIndices;
 
     /**
      * Creates a new SVGToPDFConverter for the specified output file.
@@ -75,6 +87,9 @@ public class SVGToPDFConverter extends DefaultHandler {
         outputPrintWriter = new PrintWriter(file);
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
+        pdfIndex = 0;
+        xrefStart = 0;
+        pdfObjectIndices = new ArrayList<>();
     }
 
     /**
@@ -258,8 +273,14 @@ public class SVGToPDFConverter extends DefaultHandler {
         String catalogObject =
                 String.format(PDF_CATALOG_FORMAT, pdfObjectCount);
         writePDFObject(catalogObject);
+        
+        writeXREF();
 
-        writePDFTrailer();
+        writeTrailer();
+        
+        write("startxref\n" + xrefStart + "\n\n");
+        
+        write("%%EOF");
 
         outputPrintWriter.close(); // Close the PrintWriter to finish the file
     }
@@ -272,6 +293,8 @@ public class SVGToPDFConverter extends DefaultHandler {
     private void write(String s) {
         outputPrintWriter.print(s);
         outputPrintWriter.flush(); // This is need to actually write the data.
+        
+        pdfIndex += s.length();
     }
 
     /**
@@ -283,18 +306,39 @@ public class SVGToPDFConverter extends DefaultHandler {
         // Takes the next index (starting from 1) and the object's contents
         String wrappedPDFObject = String.format(PDF_OBJECT_FORMAT,
                 ++pdfObjectCount, pdfObjectContents);
+        
+        // Add the PDF object's index to the record
+        pdfObjectIndices.add(pdfIndex);
 
         // Write the wrapped object
         write(wrappedPDFObject);
     }
 
     /**
+     * Writes the xref for the PDF.
+     */
+    private void writeXREF() {
+        xrefStart = pdfIndex;
+        
+        int numberOfPDFObjects = pdfObjectIndices.size();
+        
+        // Takes just the index of the catalog object
+        String xref = String.format(XREF_HEADER_FORMAT, numberOfPDFObjects);
+        
+        for (Integer index : pdfObjectIndices) {
+            xref += String.format(XREF_ENTRY_FORMAT, index);
+        }
+
+        write(xref + "\n");
+    }
+
+    /**
      * Writes the trailer for the PDF.
      */
-    private void writePDFTrailer() {
+    private void writeTrailer() {
         // Takes just the index of the catalog object
-        String pdfTrailer = String.format(PDF_TRAILER_FORMAT, pdfObjectCount);
+        String trailer = String.format(PDF_TRAILER_FORMAT, pdfObjectCount);
 
-        write(pdfTrailer);
+        write(trailer);
     }
 }
