@@ -58,6 +58,20 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         formatPDFObjectContentsAsStream();
     }
 
+    /**
+     * Removes the bottommost scope from DocumentAttributes.
+     *
+     * @param namespaceURI
+     * @param localName
+     * @param qName
+     * @throws SAXException
+     */
+    @Override
+    public void endElement(String namespaceURI, String localName, String qName)
+            throws SAXException {
+        gElementHandler.endElement(namespaceURI, localName, qName);
+    }
+
     public abstract void drawPath();
 
     protected double invertY(double y) {
@@ -106,7 +120,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         } else if (hasFill) {
             appendToPDFObjectContents("  f n\n");
         } else if (hasStroke) {
-            appendToPDFObjectContents("  s\n");
+            appendToPDFObjectContents("  h s\n");
         } else {
             appendToPDFObjectContents("  n\n");
         }
