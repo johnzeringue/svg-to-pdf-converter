@@ -50,10 +50,10 @@ public class TextElementHandler extends ElementHandler {
         appendToPDFObjectContents(String.format("  0.0 g\n  /F%d %.1f Tf\n",
                 DocumentFonts.getInstance().getFontNumber(fontFamily) + 1,
                 fontSize));
-        int height = docAtts.getHeight();
-        appendToPDFObjectContents(String.format("  %d %d Td\n",
-                (int) Double.parseDouble(atts.getValue("x")),
-                height - (int) Double.parseDouble(atts.getValue("y"))));
+        double height = docAtts.getHeight();
+        appendToPDFObjectContents(String.format("  %f %f Td\n",
+                Double.parseDouble(atts.getValue("x")),
+                height - Double.parseDouble(atts.getValue("y"))));
     }
 
     @Override

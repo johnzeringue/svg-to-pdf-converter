@@ -14,19 +14,19 @@ public class SVGElementHandler extends ElementHandler {
 
     // The view box formatting string (<min-x> <min-y> width height)
     private final static String VIEW_BOX_FORMAT = "0 0 %s %s";
-    // The default width setting if none is given
-    private final static int DEFAULT_WIDTH = 1073;
-    // The default height setting if none is given
-    private final static int DEFAULT_HEIGHT = 600;
     // The child GElementHandler
     private GElementHandler gElementHandler;
+    private double pageWidth;
+    private double pageHeight;
 
     /**
      * Creates a new SVGElementHandler with a GElementHandler to do all the
      * work.
      */
-    public SVGElementHandler() {
+    public SVGElementHandler(double pageWidth, double pageHeight) {
         gElementHandler = new GElementHandler();
+        this.pageWidth = pageWidth;
+        this.pageHeight = pageHeight;
     }
 
     /**
@@ -55,8 +55,8 @@ public class SVGElementHandler extends ElementHandler {
             // Check for height and width
             if (width == null || height == null) {
                 // If one's missing, replace them both with defaults
-                width = DEFAULT_WIDTH + "px";
-                height = DEFAULT_HEIGHT + "px";
+                width = pageWidth + "px";
+                height = pageHeight + "px";
             }
 
             viewBox = String.format(VIEW_BOX_FORMAT,

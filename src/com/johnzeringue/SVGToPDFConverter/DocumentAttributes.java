@@ -23,8 +23,8 @@ public class DocumentAttributes {
     // implementation does not.
     private Deque<Attributes> scopes;
     
-    private int height;
-    private int width;
+    private double height;
+    private double width;
 
     private DocumentAttributes() {
         attributes = new Attributes();
@@ -71,10 +71,10 @@ public class DocumentAttributes {
         // Exceptions for special cases
         switch (name) {
             case "height":
-                height = Integer.parseInt(value.replaceAll("px", ""));
+                height = Double.parseDouble(value.replaceAll("px", ""));
                 break;
             case "width":
-                width = Integer.parseInt(value.replaceAll("px", ""));
+                width = Double.parseDouble(value.replaceAll("px", ""));
                 break;
         }
         
@@ -97,11 +97,11 @@ public class DocumentAttributes {
         scopes.removeLast();
     }
     
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
     
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
     

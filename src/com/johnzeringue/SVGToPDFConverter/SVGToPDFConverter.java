@@ -28,6 +28,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class SVGToPDFConverter extends DefaultHandler {
 
+    private final static double DEFAULT_WIDTH = 1200;
+    private final static double DEFAULT_HEIGHT = 800;
     // The PDF version used in this implementation
     public final static double PDF_VERSION = 1.7;
     // The formatting string for a PDF reference
@@ -48,7 +50,8 @@ public class SVGToPDFConverter extends DefaultHandler {
     // The formatting string for a PDF trailer
     public final static String PDF_TRAILER_FORMAT = ""
             + "trailer\n"
-            + "  <</Root %d 0 R>>\n\n";
+            + "  <</Root %d 0 R"
+            + "    /Size %d>>\n\n";
     public final static String XREF_HEADER_FORMAT = ""
             + "xref\n"
             + "0 %d\n"
@@ -66,6 +69,8 @@ public class SVGToPDFConverter extends DefaultHandler {
     private int xrefStart;
     // The indices of all PDF Objects
     private List<Integer> pdfObjectIndices;
+    private double width; // Page width
+    private double height; // Page height
 
     /**
      * Creates a new SVGToPDFConverter for the specified output file.
@@ -84,12 +89,25 @@ public class SVGToPDFConverter extends DefaultHandler {
      * @throws FileNotFoundException
      */
     public SVGToPDFConverter(File file) throws FileNotFoundException {
+        this(file, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+
+    /**
+     * Creates a new SVGToPDFConverter for the specified output file and page
+     * dimensions.
+     *
+     * @param file
+     * @throws FileNotFoundException
+     */
+    public SVGToPDFConverter(File file, double width, double height) throws FileNotFoundException {
         outputPrintWriter = new PrintWriter(file);
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
         pdfIndex = 0;
         xrefStart = 0;
         pdfObjectIndices = new ArrayList<>();
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -134,7 +152,7 @@ public class SVGToPDFConverter extends DefaultHandler {
             String qName, Attributes atts) throws SAXException {
         // Push the appropriate ElementHandler to the stack
         if (qName.equalsIgnoreCase("SVG")) {
-            elementHandlers.push(new SVGElementHandler());
+            elementHandlers.push(new SVGElementHandler(width, height));
         } else if (qName.equalsIgnoreCase("G")) {
             elementHandlers.push(new GElementHandler());
         } else if (qName.equalsIgnoreCase("Text")) {
@@ -185,7 +203,7 @@ public class SVGToPDFConverter extends DefaultHandler {
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
         ElementHandler topElementHandler = elementHandlers.peek();
-        
+
         // Call endElement for the top element on the stack.
         topElementHandler.endElement(qName, localName, qName);
 
@@ -230,7 +248,7 @@ public class SVGToPDFConverter extends DefaultHandler {
             for (int i = 0; i < DocumentFonts.getInstance().getFonts().size(); i++) {
                 fontObject =
                         String.format("  <</BaseFont /%s\n    /Subtype /Type1\n    /Type /Font>>",
-                        DocumentFonts.getInstance().getFonts().get(i));
+                        DocumentFonts.getInstance().getFonts().get(i).replaceAll(" ", ""));
                 writePDFObject(fontObject);
             }
         }
@@ -243,11 +261,15 @@ public class SVGToPDFConverter extends DefaultHandler {
                 resourcesObject +=
                         String.format("/Font <</F%d %d 0 R>>", i,
                         fontsStartIndex + i - 1);
-                if (i != fontCount) {
-                    resourcesObject += "\n    ";
-                }
+                resourcesObject += "\n    ";
             }
         }
+        // Add the resource for transparency
+        resourcesObject += ""
+                + "/Trans << /Type ExtGState\n"
+                + "     /BM /Normal\n"
+                + "     /CA 1.0\n"
+                + "     /ca 0.35 >>";
         resourcesObject += ">>";
         writePDFObject(resourcesObject);
 
@@ -273,13 +295,13 @@ public class SVGToPDFConverter extends DefaultHandler {
         String catalogObject =
                 String.format(PDF_CATALOG_FORMAT, pdfObjectCount);
         writePDFObject(catalogObject);
-        
+
         writeXREF();
 
         writeTrailer();
-        
+
         write("startxref\n" + xrefStart + "\n\n");
-        
+
         write("%%EOF");
 
         outputPrintWriter.close(); // Close the PrintWriter to finish the file
@@ -293,7 +315,7 @@ public class SVGToPDFConverter extends DefaultHandler {
     private void write(String s) {
         outputPrintWriter.print(s);
         outputPrintWriter.flush(); // This is need to actually write the data.
-        
+
         pdfIndex += s.length();
     }
 
@@ -306,7 +328,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         // Takes the next index (starting from 1) and the object's contents
         String wrappedPDFObject = String.format(PDF_OBJECT_FORMAT,
                 ++pdfObjectCount, pdfObjectContents);
-        
+
         // Add the PDF object's index to the record
         pdfObjectIndices.add(pdfIndex);
 
@@ -319,12 +341,12 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     private void writeXREF() {
         xrefStart = pdfIndex;
-        
-        int numberOfPDFObjects = pdfObjectIndices.size();
-        
+
+        int numberOfPDFObjects = pdfObjectIndices.size() + 1;
+
         // Takes just the index of the catalog object
         String xref = String.format(XREF_HEADER_FORMAT, numberOfPDFObjects);
-        
+
         for (Integer index : pdfObjectIndices) {
             xref += String.format(XREF_ENTRY_FORMAT, index);
         }
@@ -337,7 +359,8 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     private void writeTrailer() {
         // Takes just the index of the catalog object
-        String trailer = String.format(PDF_TRAILER_FORMAT, pdfObjectCount);
+        String trailer = String.format(PDF_TRAILER_FORMAT, pdfObjectCount,
+                pdfObjectIndices.size() + 1);
 
         write(trailer);
     }
