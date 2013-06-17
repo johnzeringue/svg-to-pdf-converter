@@ -42,10 +42,6 @@ public abstract class GraphicsElementHandler extends ElementHandler {
 
         saveGraphicsState();
         
-        if ("0.35".equals(docAtts.getValue("opacity"))) {
-            appendToPDFObjectContents("  /Trans gs\n");
-        }
-        
         drawPath();
         
         setFill();

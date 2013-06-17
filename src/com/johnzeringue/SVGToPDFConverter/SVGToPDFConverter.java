@@ -264,12 +264,6 @@ public class SVGToPDFConverter extends DefaultHandler {
                 resourcesObject += "\n    ";
             }
         }
-        // Add the resource for transparency
-        resourcesObject += ""
-                + "/Trans << /Type ExtGState\n"
-                + "     /BM /Normal\n"
-                + "     /CA 1.0\n"
-                + "     /ca 0.35 >>";
         resourcesObject += ">>";
         writePDFObject(resourcesObject);
 
