@@ -75,20 +75,11 @@ public class SVGToPDFConverter extends DefaultHandler {
     /**
      * Creates a new SVGToPDFConverter for the specified output file.
      *
-     * @param filename
-     * @throws FileNotFoundException
-     */
-    public SVGToPDFConverter(String filename) throws FileNotFoundException {
-        this(new File(filename));
-    }
-
-    /**
-     * Creates a new SVGToPDFConverter for the specified output file.
-     *
      * @param file
      * @throws FileNotFoundException
      */
-    public SVGToPDFConverter(File file) throws FileNotFoundException {
+    public SVGToPDFConverter(File file)
+            throws FileNotFoundException {
         this(file, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
@@ -99,7 +90,20 @@ public class SVGToPDFConverter extends DefaultHandler {
      * @param file
      * @throws FileNotFoundException
      */
-    public SVGToPDFConverter(File file, double width, double height) throws FileNotFoundException {
+    public SVGToPDFConverter(File file, java.awt.geom.Point2D maxPoint)
+            throws FileNotFoundException {
+        this (file, maxPoint.getX(), maxPoint.getY());
+    }
+
+    /**
+     * Creates a new SVGToPDFConverter for the specified output file and page
+     * dimensions.
+     *
+     * @param file
+     * @throws FileNotFoundException
+     */
+    public SVGToPDFConverter(File file, double width, double height)
+            throws FileNotFoundException {
         outputPrintWriter = new PrintWriter(file);
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;

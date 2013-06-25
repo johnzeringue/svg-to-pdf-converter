@@ -3,7 +3,6 @@ package com.johnzeringue.SVGToPDFConverter;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +43,6 @@ public class Driver {
         if (fileChooser.showDialog(
                 null, "Convert") == JFileChooser.APPROVE_OPTION) {
             File svgInput = fileChooser.getSelectedFile();
-            Point2D p = getMaxAndMin(svgInput);
             File pdfOutput =
                     new File(svgInput.getPath().replace(".svg", ".pdf"));
 
@@ -52,7 +50,7 @@ public class Driver {
 
             // Parse the file
             saxParser.parse(new FileInputStream(svgInput),
-                    new SVGToPDFConverter(pdfOutput, p.getX(), p.getY()));
+                    new SVGToPDFConverter(pdfOutput, getMaxAndMin(svgInput)));
 
             System.out.println("Done!");
         }
