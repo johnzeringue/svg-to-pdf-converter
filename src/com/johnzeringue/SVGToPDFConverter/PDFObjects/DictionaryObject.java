@@ -1,44 +1,43 @@
 package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
 /**
- *
+ * An object representing a dictionary object in a PDF file.
  *
  * @author John Zeringue
  */
 public class DictionaryObject implements DirectObject {
 
-    private Lines entries;
+    private TextLines _entries;
 
     public DictionaryObject() {
-        entries = new Lines();
+        _entries = new TextLines();
     }
 
     public DictionaryObject addEntry(NameObject key, DirectObject value) {
-        int keyLength = key.getLines().toString().length();
+        int keyLength = key.getTextLines().toString().length();
         
-        entries.addLine(String.format("%s %s",
-                key.getLines(),
-                value.getLines().indentTailBy(keyLength + 1)));
+        value.getTextLines().indentTailLinesBy(keyLength + 1);
+        
+        // Create the first line by adding the key to the first line of the
+        // value
+        _entries.appendLine(String.format("%s %s",
+                key.getTextLines(),
+                value.getTextLines().getLineAt(0)));
+        
+        // Add the rest of value onto the entries
+        for (int i = 1; i < value.getTextLines().size(); i++) {
+            _entries.appendLine(value.getTextLines().getLineAt(i));
+        }
 
         return this;
     }
 
     @Override
-    public Lines getLines() {
-        if (entries.getLength() == 0) {
-            return (new Lines()).addLine("<< >>");
-        } else if (entries.getLength() == 1) {
-            return (new Lines()).addLine("<< " + entries.getLine(0) + " >>");
-        } else {
-            Lines dictLines = new Lines();
-            
-            dictLines.addLine("<< " + entries.getLine(0));
-            for (int i = 1; i < entries.getLength() - 1; i++) {
-                dictLines.addLine("   " + entries.getLine(i));
-            }
-            dictLines.addLine("   " + entries.getLine(entries.getLength() - 1) + " >>");
-            
-            return dictLines;
-        }
+    public TextLines getTextLines() {
+        _entries.indentTailLinesBy(3);
+        _entries.getLineAt(0).prepend("<< ");
+        _entries.getLineAt(_entries.size() - 1).append(" >>");
+        
+        return _entries;
     }
 }

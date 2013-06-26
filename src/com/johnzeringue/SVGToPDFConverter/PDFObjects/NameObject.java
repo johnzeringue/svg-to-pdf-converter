@@ -9,15 +9,15 @@ package com.johnzeringue.SVGToPDFConverter.PDFObjects;
  * @author john
  */
 class NameObject implements DirectObject {
-    private String value;
+    private String _value;
     
     public NameObject(String value) {
-        this.value = value;
+        _value = value;
     }
 
     @Override
-    public Lines getLines() {
-        return (new Lines()).addLine("/" + value);
+    public TextLines getTextLines() {
+        return new TextLines().appendLine("/" + _value);
     }
     
 }
