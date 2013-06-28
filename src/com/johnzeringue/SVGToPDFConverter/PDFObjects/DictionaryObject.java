@@ -12,6 +12,10 @@ public class DictionaryObject implements DirectObject {
     public DictionaryObject() {
         _entries = new TextLines();
     }
+    
+    public DictionaryObject addEntry(String key, DirectObject value) {
+        return addEntry(new NameObject(key), value);
+    }
 
     public DictionaryObject addEntry(NameObject key, DirectObject value) {
         int keyLength = key.getTextLines().toString().length();

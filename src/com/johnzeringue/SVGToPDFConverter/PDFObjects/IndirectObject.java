@@ -46,7 +46,7 @@ public class IndirectObject {
     @Override
     public String toString() {
         return String.format(INDIRECT_OBJECT_FORMAT, 
-                indirectObjectCount,
-                _object.getTextLines().indentAllLinesBy(2));
+                _indirectObjectNumber,
+                _object.getTextLines());
     }
 }

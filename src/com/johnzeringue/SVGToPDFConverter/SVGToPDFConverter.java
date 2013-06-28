@@ -1,10 +1,10 @@
 package com.johnzeringue.SVGToPDFConverter;
 
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.CircleElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.LineElementHandler;
-import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.RectElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.PathElementHandler;
-import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
+import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.RectElementHandler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
