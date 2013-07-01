@@ -17,7 +17,7 @@ public class LineElementHandler extends GraphicsElementHandler {
         y2 = Double.parseDouble(docAtts.getValue("y2"));
         y1 = docAtts.getHeight() - y1;
         y2 = docAtts.getHeight() - y2;
-        appendToPDFObjectContents(String.format("  %.0f %.0f m %.0f %.0f l\n",
+        _object.appendLine(String.format("%.0f %.0f m %.0f %.0f l",
                 x1, y1, x2, y2));
     }
 }

@@ -8,7 +8,7 @@ package com.johnzeringue.SVGToPDFConverter.PDFObjects;
  *
  * @author john
  */
-class NameObject implements DirectObject {
+public class NameObject implements DirectObject {
     private String _value;
     
     public NameObject(String value) {

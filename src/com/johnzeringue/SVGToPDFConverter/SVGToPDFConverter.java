@@ -1,18 +1,21 @@
 package com.johnzeringue.SVGToPDFConverter;
 
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.RealObject;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.*;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.CircleElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.LineElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.PathElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.RectElementHandler;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.ArrayObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.DictionaryObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.IndirectObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.IntegerObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.NameObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.ObjectReference;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -30,47 +33,13 @@ public class SVGToPDFConverter extends DefaultHandler {
 
     private final static double DEFAULT_WIDTH = 1200;
     private final static double DEFAULT_HEIGHT = 800;
-    // The PDF version used in this implementation
-    public final static double PDF_VERSION = 1.7;
-    // The formatting string for a PDF reference
-    public final static String PDF_REFERENCE_FORMAT = "%d 0 R";
-    // The formatting string for a PDF object
-    public final static String PDF_OBJECT_FORMAT = ""
-            + "%d 0 obj\n"
-            + "%s\n"
-            + "endobj\n\n";
-    // The formatting string for a PDF pages object
-    public final static String PDF_PAGES_FORMAT = ""
-            + "  <</Type /Pages\n"
-            + "    /Kids [" + PDF_REFERENCE_FORMAT + "]>>";
-    // The formatting string for a PDF catalog object
-    public final static String PDF_CATALOG_FORMAT = ""
-            + "  <</Type /Catalog\n"
-            + "    /Pages " + PDF_REFERENCE_FORMAT + ">>";
-    // The formatting string for a PDF trailer
-    public final static String PDF_TRAILER_FORMAT = ""
-            + "trailer\n"
-            + "  <</Root %d 0 R"
-            + "    /Size %d>>\n\n";
-    public final static String XREF_HEADER_FORMAT = ""
-            + "xref\n"
-            + "0 %d\n"
-            + "0000000000 65535 f\n";
-    public final static String XREF_ENTRY_FORMAT = ""
-            + "%010d 00000 n\n";
-    // A PrintWriter printing to the output file
-    private PrintWriter outputPrintWriter;
     // The stack of all active ElementHandlers
     private Stack<ElementHandler> elementHandlers;
     // The number of objects that have been written by this converter
     private int pdfObjectCount;
-    // The current character index while writing the PDF
-    private int pdfIndex;
-    private int xrefStart;
-    // The indices of all PDF Objects
-    private List<Integer> pdfObjectIndices;
-    private double width; // Page width
-    private double height; // Page height
+    private double pageWidth;
+    private double pageHeight;
+    private PDFWriter _writer;
 
     /**
      * Creates a new SVGToPDFConverter for the specified output file.
@@ -92,7 +61,7 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     public SVGToPDFConverter(File file, java.awt.geom.Point2D maxPoint)
             throws FileNotFoundException {
-        this (file, maxPoint.getX(), maxPoint.getY());
+        this(file, maxPoint.getX(), maxPoint.getY());
     }
 
     /**
@@ -104,14 +73,11 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     public SVGToPDFConverter(File file, double width, double height)
             throws FileNotFoundException {
-        outputPrintWriter = new PrintWriter(file);
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
-        pdfIndex = 0;
-        xrefStart = 0;
-        pdfObjectIndices = new ArrayList<>();
-        this.width = width;
-        this.height = height;
+        this.pageWidth = width;
+        this.pageHeight = height;
+        _writer = new PDFWriter(file);
     }
 
     /**
@@ -127,8 +93,7 @@ public class SVGToPDFConverter extends DefaultHandler {
     @Override
     public InputSource resolveEntity(String publicId, String systemId)
             throws IOException, SAXException {
-        InputStream inputStream = new FileInputStream("resources/svg10.dtd");
-        return (new InputSource(inputStream));
+        return new InputSource(new FileInputStream("resources/svg10.dtd"));
     }
 
     /**
@@ -139,7 +104,7 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     @Override
     public void startDocument() throws SAXException {
-        write(String.format("%%PDF-%1.1f\n\n", PDF_VERSION));
+        writeHeader(1.7);
     }
 
     /**
@@ -156,11 +121,11 @@ public class SVGToPDFConverter extends DefaultHandler {
             String qName, Attributes atts) throws SAXException {
         // Push the appropriate ElementHandler to the stack
         if (qName.equalsIgnoreCase("SVG")) {
-            elementHandlers.push(new SVGElementHandler(width, height));
+            elementHandlers.push(new SVGElementHandler(pageWidth, pageHeight));
         } else if (qName.equalsIgnoreCase("G")) {
             elementHandlers.push(new GElementHandler());
         } else if (qName.equalsIgnoreCase("Text")) {
-            elementHandlers.push(new TextElementHandler());
+            elementHandlers.push(new ElementHandler()); // CHANGE THIS BACK!!!
         } else if (qName.equalsIgnoreCase("Rect")) {
             elementHandlers.push(new RectElementHandler());
         } else if (qName.equalsIgnoreCase("Circle")) {
@@ -212,8 +177,10 @@ public class SVGToPDFConverter extends DefaultHandler {
         topElementHandler.endElement(qName, localName, qName);
 
         // See if this ElementHandler has PDF object contents and write it if so.
-        if (topElementHandler.hasPDFObjectContents()) {
-            writePDFObject(topElementHandler.getPDFObjectContents());
+        if (topElementHandler.hasDirectObject()) {
+            writeIndirectObject(
+                    new IndirectObject(topElementHandler.getDirectObject()));
+            pdfObjectCount++;
         }
 
         // Pop the top ElementHandler off of the stack.
@@ -227,139 +194,69 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     @Override
     public void endDocument() throws SAXException {
+        IndirectObject contentsObject, pageObject, pagesObject, catalogObject;
+        DictionaryObject pageDictionary, pagesDictionary, catalogDictionary;
+        ObjectReference contentsReference, pageReference, pagesReference,
+                catalogReference;
+
         // Write the contents object
-        StringBuilder contentsObject = new StringBuilder("  [");
-        for (int i = 1; i < pdfObjectCount; i++) {
-            contentsObject.append(String.format(PDF_REFERENCE_FORMAT, i));
-            contentsObject.append("\n   ");
+        ArrayObject contentsArray = new ArrayObject();
+        for (int i = 1; i <= pdfObjectCount; i++) {
+            contentsArray.add(new ObjectReference(i));
         }
-        if (pdfObjectCount > 0) {
-            contentsObject.append(
-                    String.format(PDF_REFERENCE_FORMAT, pdfObjectCount));
-        }
-        contentsObject.append("]");
-        writePDFObject(contentsObject.toString());
-        int contentsIndex = pdfObjectCount;
+        contentsObject = new IndirectObject(contentsArray);
+        contentsReference = contentsObject.getObjectReference();
 
-        /**
-         * Write the page tree
-         */
-        /* Write the font information if it exists */
-        int fontsStartIndex = 0;
-        if (DocumentFonts.getInstance().getFonts().size() > 0) {
-            fontsStartIndex = contentsIndex + 1;
-            String fontObject;
-            for (int i = 0; i < DocumentFonts.getInstance().getFonts().size(); i++) {
-                fontObject =
-                        String.format("  <</BaseFont /%s\n    /Subtype /Type1\n    /Type /Font>>",
-                        DocumentFonts.getInstance().getFonts().get(i).replaceAll(" ", ""));
-                writePDFObject(fontObject);
-            }
-        }
+        // Write the page object
+        pageDictionary = new DictionaryObject()
+                .addEntry("Type", new NameObject("Page"))
+                .addEntry("Contents", contentsReference)
+                .addEntry("MediaBox", new ArrayObject()
+                        .add(new IntegerObject(0))
+                        .add(new IntegerObject(0))
+                        .add(new RealObject(pageWidth))
+                        .add(new RealObject(pageHeight)))
+                .addEntry("Resources", new DictionaryObject());
+        pageObject = new IndirectObject(pageDictionary);
+        pageReference = pageObject.getObjectReference();
 
-        /* Write the resources object */
-        String resourcesObject = "  <<";
-        if (fontsStartIndex > 0) {
-            int fontCount = DocumentFonts.getInstance().getFonts().size();
-            for (int i = 1; i <= fontCount; i++) {
-                resourcesObject +=
-                        String.format("/Font <</F%d %d 0 R>>", i,
-                        fontsStartIndex + i - 1);
-                resourcesObject += "\n    ";
-            }
-        }
-        resourcesObject += ">>";
-        writePDFObject(resourcesObject);
-
-        // Write the page object (clean this up!)
-        String pageObject = "  <</Type /Page\n";
-        pageObject += "    /Contents "
-                + String.format(PDF_REFERENCE_FORMAT, contentsIndex) + "\n";
-        pageObject += "    /MediaBox ["
-                + DocumentAttributes.getInstance().getValue("viewBox")
-                + "]\n";
-        pageObject += "    /Parent "
-                + String.format(PDF_REFERENCE_FORMAT, pdfObjectCount + 2) + "\n";
-        pageObject += "    /Resources "
-                + String.format(PDF_REFERENCE_FORMAT, pdfObjectCount)
-                + ">>";
-        writePDFObject(pageObject);
-
-        // Write the pages object
-        String pagesObject = String.format(PDF_PAGES_FORMAT, pdfObjectCount);
-        writePDFObject(pagesObject);
-
-        // Write the catalog object
-        String catalogObject =
-                String.format(PDF_CATALOG_FORMAT, pdfObjectCount);
-        writePDFObject(catalogObject);
-
-        writeXREF();
-
-        writeTrailer();
-
-        write("startxref\n" + xrefStart + "\n\n");
-
-        write("%%EOF");
-
-        outputPrintWriter.close(); // Close the PrintWriter to finish the file
+        pagesDictionary = new DictionaryObject()
+                .addEntry("Type", new NameObject("Pages"))
+                .addEntry("Kids", new ArrayObject().add(pageReference))
+                .addEntry("Count", new IntegerObject(1));
+        pagesObject = new IndirectObject(pagesDictionary);
+        pagesReference = pagesObject.getObjectReference();
+        
+        catalogDictionary = new DictionaryObject()
+                .addEntry("Type", new NameObject("Catalog"))
+                .addEntry("Pages", pagesReference);
+        catalogObject = new IndirectObject(catalogDictionary);
+        catalogReference = catalogObject.getObjectReference();
+        
+        pageDictionary.addEntry("Parent", pagesReference);
+        
+        writeIndirectObject(contentsObject);
+        writeIndirectObject(pageObject);
+        writeIndirectObject(pagesObject);
+        writeIndirectObject(catalogObject);
+        
+        writeCrossReferenceTable();
+        writeTrailer(catalogReference);
     }
 
-    /**
-     * Writes the given string to the new PDF file.
-     *
-     * @param s
-     */
-    private void write(String s) {
-        outputPrintWriter.print(s);
-        outputPrintWriter.flush(); // This is need to actually write the data.
-
-        pdfIndex += s.length();
+    private void writeHeader(double version) {
+        _writer.writeHeader(version);
     }
-
-    /**
-     * Writes the given "unwrapped" PDF object to the new PDF file.
-     *
-     * @param s
-     */
-    private void writePDFObject(String pdfObjectContents) {
-        // Takes the next index (starting from 1) and the object's contents
-        String wrappedPDFObject = String.format(PDF_OBJECT_FORMAT,
-                ++pdfObjectCount, pdfObjectContents);
-
-        // Add the PDF object's index to the record
-        pdfObjectIndices.add(pdfIndex);
-
-        // Write the wrapped object
-        write(wrappedPDFObject);
+    
+    private void writeIndirectObject(IndirectObject anObject) {
+        _writer.writeIndirectObject(anObject);
     }
-
-    /**
-     * Writes the xref for the PDF.
-     */
-    private void writeXREF() {
-        xrefStart = pdfIndex;
-
-        int numberOfPDFObjects = pdfObjectIndices.size() + 1;
-
-        // Takes just the index of the catalog object
-        String xref = String.format(XREF_HEADER_FORMAT, numberOfPDFObjects);
-
-        for (Integer index : pdfObjectIndices) {
-            xref += String.format(XREF_ENTRY_FORMAT, index);
-        }
-
-        write(xref + "\n");
+    
+    private void writeCrossReferenceTable() {
+        _writer.writeCrossReferenceTable();
     }
-
-    /**
-     * Writes the trailer for the PDF.
-     */
-    private void writeTrailer() {
-        // Takes just the index of the catalog object
-        String trailer = String.format(PDF_TRAILER_FORMAT, pdfObjectCount,
-                pdfObjectIndices.size() + 1);
-
-        write(trailer);
+    
+    private void writeTrailer(ObjectReference root) {
+        _writer.writeTrailer(root);
     }
 }

@@ -1,5 +1,8 @@
 package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * An object representing a dictionary object in a PDF file.
  *
@@ -7,41 +10,71 @@ package com.johnzeringue.SVGToPDFConverter.PDFObjects;
  */
 public class DictionaryObject implements DirectObject {
 
-    private TextLines _entries;
+    private boolean _hasChanged;
+    private Map<NameObject, DirectObject> _map;
+    private TextLines _textValue;
 
     public DictionaryObject() {
-        _entries = new TextLines();
+        _map = new HashMap<>();
+        _hasChanged = false;
+        _textValue = new TextLines().appendLine("<< >>");
     }
-    
+
     public DictionaryObject addEntry(String key, DirectObject value) {
         return addEntry(new NameObject(key), value);
     }
 
     public DictionaryObject addEntry(NameObject key, DirectObject value) {
-        int keyLength = key.getTextLines().toString().length();
-        
-        value.getTextLines().indentTailLinesBy(keyLength + 1);
-        
-        // Create the first line by adding the key to the first line of the
-        // value
-        _entries.appendLine(String.format("%s %s",
-                key.getTextLines(),
-                value.getTextLines().getLineAt(0)));
-        
-        // Add the rest of value onto the entries
-        for (int i = 1; i < value.getTextLines().size(); i++) {
-            _entries.appendLine(value.getTextLines().getLineAt(i));
-        }
+        _map.put(key, value);
+        _hasChanged = true;
 
         return this;
+    }
+    
+    public DirectObject getValue(String key) {
+        return getValue(new NameObject(key));
+    }
+    
+    public DirectObject getValue(NameObject key) {
+        return _map.get(key);
+    }
+    
+    public boolean containsKey(String key) {
+        return containsKey(new NameObject(key));
+    }
+    
+    public boolean containsKey(NameObject key) {
+        return _map.containsKey(key);
     }
 
     @Override
     public TextLines getTextLines() {
-        _entries.indentTailLinesBy(3);
-        _entries.getLineAt(0).prepend("<< ");
-        _entries.getLineAt(_entries.size() - 1).append(" >>");
-        
-        return _entries;
+        if (_hasChanged) {
+            _textValue = new TextLines();
+
+            int keyLength;
+            for (Map.Entry<NameObject, DirectObject> anEntry : _map.entrySet()) {
+                keyLength = anEntry.getKey().getTextLines().getLineAt(0).length();
+
+                _textValue.appendLine(
+                        String.format("%s %s",
+                                      anEntry.getKey().getTextLines(),
+                                      anEntry.getValue().getTextLines().getLineAt(0)));
+
+                for (int i = 1; i < anEntry.getValue().getTextLines().size(); i++) {
+                    _textValue.appendLine(
+                            anEntry.getValue().getTextLines()
+                            .indentTailLinesBy(keyLength + 1).getLineAt(i));
+                }
+            }
+
+            _textValue.indentTailLinesBy(3);
+            _textValue.getLineAt(0).prepend("<< ");
+            _textValue.getLineAt(_textValue.size() - 1).append(" >>");
+
+            _hasChanged = false;
+        }
+
+        return _textValue;
     }
 }

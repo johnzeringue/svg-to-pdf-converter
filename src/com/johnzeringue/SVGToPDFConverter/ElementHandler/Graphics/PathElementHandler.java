@@ -39,8 +39,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = Double.parseDouble(m.group(1));
                         y = invertY(Double.parseDouble(m.group(2)));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f m\n", x, y));
+                        _object.appendLine(
+                                String.format("%f %f m", x, y));
 
                         currentPoint.setLocation(x, y);
 
@@ -56,8 +56,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = currentPoint.getX() + Double.parseDouble(m.group(1));
                         y = currentPoint.getY() - Double.parseDouble(m.group(2));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f m\n", x, y));
+                        _object.appendLine(
+                                String.format("%f %f m", x, y));
 
                         currentPoint.setLocation(x, y);
 
@@ -81,8 +81,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = Double.parseDouble(m.group(5));
                         y = invertY(Double.parseDouble(m.group(6)));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f %f %f %f %f c\n",
+                        _object.appendLine(
+                                String.format("%f %f %f %f %f %f c",
                                 x1, y1, x2, y2, x, y));
 
                         currentPoint.setLocation(x, y);
@@ -103,8 +103,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = currentPoint.getX() + Double.parseDouble(m.group(5));
                         y = currentPoint.getY() - Double.parseDouble(m.group(6));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f %f %f %f %f c\n",
+                        _object.appendLine(
+                                String.format("%f %f %f %f %f %f c",
                                 x1, y1, x2, y2, x, y));
 
                         currentPoint.setLocation(x, y);
@@ -121,8 +121,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = Double.parseDouble(m.group(1));
                         y = invertY(Double.parseDouble(m.group(2)));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f l\n", x, y));
+                        _object.appendLine(
+                                String.format("%f %f l", x, y));
 
                         currentPoint.setLocation(x, y);
 
@@ -138,8 +138,8 @@ public class PathElementHandler extends GraphicsElementHandler {
                         x = currentPoint.getX() + Double.parseDouble(m.group(1));
                         y = currentPoint.getY() - Double.parseDouble(m.group(2));
 
-                        appendToPDFObjectContents(
-                                String.format("  %f %f l\n", x, y));
+                        _object.appendLine(
+                                String.format("%f %f l", x, y));
 
                         currentPoint.setLocation(x, y);
 
@@ -150,7 +150,7 @@ public class PathElementHandler extends GraphicsElementHandler {
                     break;
                 case 'Z': // The same as for 'z'
                 case 'z':
-                    appendToPDFObjectContents("  h\n");
+                    _object.appendLine("h");
 
                     path = "";
                     break;

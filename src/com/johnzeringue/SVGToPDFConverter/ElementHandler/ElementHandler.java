@@ -2,6 +2,7 @@ package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
 import com.johnzeringue.SVGToPDFConverter.Formatter;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -14,38 +15,16 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ElementHandler extends DefaultHandler {
     // A local handle for DocumentAttributes
     protected DocumentAttributes docAtts;
-    // An unwrapped PDF object
-    private String pdfObjectContents;
     
     public ElementHandler() {
         docAtts = DocumentAttributes.getInstance();
-        
-        pdfObjectContents = "";
     }
     
-    /**
-     * Returns an "unwrapped" PDF object (no index or obj/endobj tags) or null
-     * if this is not appropriate for this object.
-     * 
-     * @return 
-     */
-    public final String getPDFObjectContents() {
-        if (hasPDFObjectContents()) {
-            return pdfObjectContents.toString();
-        } else {
-            return null;
-        }
+    public DirectObject getDirectObject() {
+        return null;
     }
     
-    public boolean hasPDFObjectContents() {
-        return pdfObjectContents.length() != 0;
-    }
-    
-    protected void appendToPDFObjectContents(String s) {
-        pdfObjectContents += s;
-    }
-    
-    protected void formatPDFObjectContentsAsStream() {
-        pdfObjectContents = Formatter.formatAsStream(pdfObjectContents);
+    public boolean hasDirectObject() {
+        return false;
     }
 }

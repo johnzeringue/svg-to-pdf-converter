@@ -15,6 +15,12 @@ public class StreamObject implements DirectObject {
         _contents = new TextLines();
     }
     
+    public StreamObject appendLine(String aLine) {
+        _contents.appendLine(new TextLine(aLine));
+        
+        return this;
+    }
+    
     public StreamObject appendLine(TextLine aLine) {
         _contents.appendLine(aLine);
         
@@ -28,11 +34,11 @@ public class StreamObject implements DirectObject {
         _dictionary.addEntry(new NameObject("Length"),
                 new IntegerObject(_contents.toString().length()));
         
-        result.appendLine("stream");
-        
         for (TextLine aLine : _dictionary.getTextLines()) {
             result.appendLine(aLine);
         }
+        
+        result.appendLine("stream");
         
         for (TextLine aLine : _contents) {
             result.appendLine(aLine);

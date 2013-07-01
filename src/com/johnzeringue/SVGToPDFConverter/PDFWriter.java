@@ -16,8 +16,8 @@ import java.util.List;
  * @author John Zeringue
  */
 public class PDFWriter {
-    private final static String VERSION_FORMAT = "%010d %05d %c\r\n";
-    private final static String XREF_TABLE_ENTRY_FORMAT = "%010d %05d %c\r\n";
+    private final static String VERSION_FORMAT = "%%PDF-%1.1f\n";
+    private final static String XREF_TABLE_ENTRY_FORMAT = "%010d %05d %c \n";
     
     private PrintWriter _writer;
     private int _index;
@@ -64,7 +64,7 @@ public class PDFWriter {
         _xrefIndex = _index;
         
         writeln("xref");
-        writeln("0 " + _objectIndices.size());
+        writeln("0 " + (_objectIndices.size() + 1));
         write(String.format(XREF_TABLE_ENTRY_FORMAT, 0, 65535, 'f'));
         
         for (Integer i : _objectIndices) {
@@ -74,12 +74,12 @@ public class PDFWriter {
         writeln();
     }
     
-    public void writeFooter(ObjectReference root) {
+    public void writeTrailer(ObjectReference root) {
         DictionaryObject trailerDictionary = new DictionaryObject();
         
         writeln("trailer");
         trailerDictionary
-                .addEntry("Size", new IntegerObject(_objectIndices.size()))
+                .addEntry("Size", new IntegerObject(_objectIndices.size() + 1))
                 .addEntry("Root", root);
         writeln(trailerDictionary
                 .getTextLines().indentAllLinesBy(2).toString());
@@ -87,5 +87,7 @@ public class PDFWriter {
         writeln("startxref");
         writeln(String.valueOf(_xrefIndex));
         write("%%EOF");
+        
+        _writer.close();
     }
 }

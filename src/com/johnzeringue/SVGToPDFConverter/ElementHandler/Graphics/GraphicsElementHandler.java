@@ -2,6 +2,8 @@ package com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics;
 
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.ElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.GElementHandler;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.StreamObject;
 import java.awt.Color;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -15,13 +17,14 @@ import org.xml.sax.SAXException;
  */
 public abstract class GraphicsElementHandler extends ElementHandler {
 
+    protected StreamObject _object = new StreamObject();
     private GElementHandler gElementHandler;
     private boolean hasFill;
     private boolean hasStroke;
 
     public GraphicsElementHandler() {
+        _object = new StreamObject();
         gElementHandler = new GElementHandler();
-
         hasFill = false;
         hasStroke = false;
     }
@@ -41,21 +44,19 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         gElementHandler.startElement(namespaceURI, localName, qName, atts);
 
         saveGraphicsState();
-        
+
         drawPath();
-        
+
         setFill();
         setStroke();
-        
+
         if (hasStroke) {
             setStrokeWidth();
         }
-        
+
         closePath();
-        
+
         restoreGraphicsState();
-        
-        formatPDFObjectContentsAsStream();
     }
 
     /**
@@ -82,8 +83,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         Color fillColor = docAtts.getFill();
 
         if (fillColor != null) {
-            appendToPDFObjectContents(String.format(
-                    "  %.2f %.2f %.2f rg\n",
+            _object.appendLine(String.format(
+                    "%.2f %.2f %.2f rg",
                     fillColor.getRed() / 255.0,
                     fillColor.getGreen() / 255.0,
                     fillColor.getBlue() / 255.0));
@@ -96,12 +97,12 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         Color strokeColor = docAtts.getStroke();
 
         if (strokeColor != null) {
-            appendToPDFObjectContents(String.format(
-                    "  %.2f %.2f %.2f RG\n",
+            _object.appendLine(String.format(
+                    "%.2f %.2f %.2f RG",
                     strokeColor.getRed() / 255.0,
                     strokeColor.getGreen() / 255.0,
                     strokeColor.getBlue() / 255.0));
-            
+
             hasStroke = true;
         }
     }
@@ -110,27 +111,37 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         String strokeWidth = docAtts.getValue("stroke-width");
 
         if (strokeWidth != null) {
-            appendToPDFObjectContents(String.format("  %s w\n", strokeWidth));
+            _object.appendLine(String.format("%s w", strokeWidth));
         }
     }
-    
+
     private void closePath() {
         if (hasFill && hasStroke) {
-            appendToPDFObjectContents("  b\n");
+            _object.appendLine("b");
         } else if (hasFill) {
-            appendToPDFObjectContents("  f n\n");
+            _object.appendLine("f n");
         } else if (hasStroke) {
-            appendToPDFObjectContents("  h s\n");
+            _object.appendLine("h s");
         } else {
-            appendToPDFObjectContents("  n\n");
+            _object.appendLine("n");
         }
     }
 
     private void saveGraphicsState() {
-        appendToPDFObjectContents("  q\n");
+        _object.appendLine("q");
     }
 
     private void restoreGraphicsState() {
-        appendToPDFObjectContents("  Q\n");
+        _object.appendLine("Q");
+    }
+
+    @Override
+    public DirectObject getDirectObject() {
+        return _object;
+    }
+
+    @Override
+    public boolean hasDirectObject() {
+        return true;
     }
 }
