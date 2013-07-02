@@ -1,5 +1,7 @@
 package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
+import java.util.Objects;
+
 /**
  * 
  *
@@ -47,6 +49,32 @@ public class StreamObject implements DirectObject {
         result.appendLine("endstream");
         
         return result;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this._dictionary);
+        hash = 41 * hash + Objects.hashCode(this._contents);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final StreamObject other = (StreamObject) obj;
+        if (!Objects.equals(this._dictionary, other._dictionary)) {
+            return false;
+        }
+        if (!Objects.equals(this._contents, other._contents)) {
+            return false;
+        }
+        return true;
     }
 
 }

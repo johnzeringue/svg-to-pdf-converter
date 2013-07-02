@@ -1,4 +1,4 @@
-%PDF-1.5
+%PDF-1.7
 
 1 0 obj
 << /Length 122 >>
@@ -1652,25 +1652,25 @@ endobj
 endobj
 
 94 0 obj
-<< /Type /Page
-   /Contents 93 0 R
+<< /Contents 93 0 R
+   /Type /Page
+   /Resources << >>
+   /Parent 95 0 R
    /MediaBox [ 0
                0
-               1200
-               800 ]
-   /Resources << >>
-   /Parent 95 0 R >>
+               907.6435
+               603.0 ] >>
 endobj
 
 95 0 obj
-<< /Type /Pages
-   /Kids [ 94 0 R ]
-   /Count 1 >>
+<< /Kids [ 94 0 R ]
+   /Count 1
+   /Type /Pages >>
 endobj
 
 96 0 obj
-<< /Type /Catalog
-   /Pages 95 0 R >>
+<< /Pages 95 0 R
+   /Type /Catalog >>
 endobj
 
 xref
@@ -1770,12 +1770,12 @@ xref
 0000036853 00000 n 
 0000036951 00000 n 
 0000037789 00000 n 
-0000037957 00000 n 
-0000038025 00000 n 
+0000037963 00000 n 
+0000038031 00000 n 
 
 trailer
-  << /Size 97
-     /Root 96 0 R >>
+  << /Root 96 0 R
+     /Size 97 >>
 startxref
-38080
+38086
 %%EOF

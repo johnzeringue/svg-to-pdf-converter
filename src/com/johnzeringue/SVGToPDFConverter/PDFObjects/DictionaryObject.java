@@ -2,6 +2,7 @@ package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An object representing a dictionary object in a PDF file.
@@ -76,5 +77,29 @@ public class DictionaryObject implements DirectObject {
         }
 
         return _textValue;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + (this._hasChanged ? 1 : 0);
+        hash = 13 * hash + Objects.hashCode(this._map);
+        hash = 13 * hash + Objects.hashCode(this._textValue);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DictionaryObject other = (DictionaryObject) obj;
+        if (!Objects.equals(this._map, other._map)) {
+            return false;
+        }
+        return true;
     }
 }

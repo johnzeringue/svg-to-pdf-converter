@@ -39,4 +39,26 @@ public class RealObject implements DirectObject {
     public TextLines getTextLines() {
         return new TextLines().appendLine(String.valueOf(_value));
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this._value) ^ (Double.doubleToLongBits(this._value) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RealObject other = (RealObject) obj;
+        if (Double.doubleToLongBits(this._value) != Double.doubleToLongBits(other._value)) {
+            return false;
+        }
+        return true;
+    }
 }
