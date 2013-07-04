@@ -34,6 +34,10 @@ public class RealObject implements DirectObject {
     public RealObject(double value) {
         this._value = value;
     }
+    
+    public RealObject(String value) {
+        this(Double.parseDouble(value));
+    }
 
     @Override
     public TextLines getTextLines() {

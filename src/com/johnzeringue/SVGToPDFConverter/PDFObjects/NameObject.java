@@ -43,5 +43,10 @@ public class NameObject implements DirectObject {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "/" + _value;
+    }
     
 }

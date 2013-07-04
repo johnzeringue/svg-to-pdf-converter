@@ -2,7 +2,11 @@ package com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics;
 
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.ElementHandler;
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.GElementHandler;
+import com.johnzeringue.SVGToPDFConverter.GraphicsStates;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.DictionaryObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.NameObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.RealObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.StreamObject;
 import java.awt.Color;
 import org.xml.sax.Attributes;
@@ -49,6 +53,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
 
         setFill();
         setStroke();
+        setOpacity();
 
         if (hasStroke) {
             setStrokeWidth();
@@ -143,5 +148,14 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     @Override
     public boolean hasDirectObject() {
         return true;
+    }
+
+    private void setOpacity() {
+        if (docAtts.getValue("opacity") != null) {
+            DictionaryObject graphicsState = new DictionaryObject()
+                    .addEntry("Type", new NameObject("ExtGState"))
+                    .addEntry("ca", new RealObject(docAtts.getValue("opacity")));
+            _object.appendLine(GraphicsStates.getInstance().getGraphicStateName(graphicsState) + " gs");
+        }
     }
 }

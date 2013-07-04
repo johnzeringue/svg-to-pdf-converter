@@ -1,7 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
 import com.johnzeringue.SVGToPDFConverter.DocumentAttributes;
-import com.johnzeringue.SVGToPDFConverter.Formatter;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
 import org.xml.sax.helpers.DefaultHandler;
 

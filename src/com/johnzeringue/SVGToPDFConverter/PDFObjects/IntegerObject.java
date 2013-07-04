@@ -12,6 +12,10 @@ public class IntegerObject implements DirectObject {
         _value = value;
     }
     
+    public IntegerObject(String value) {
+        this(Integer.parseInt(value));
+    }
+    
     @Override
     public TextLines getTextLines() {
         return new TextLines().appendLine(String.valueOf(_value));

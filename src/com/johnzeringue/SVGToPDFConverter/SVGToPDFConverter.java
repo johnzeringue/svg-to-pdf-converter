@@ -8,6 +8,7 @@ import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.PathElementHan
 import com.johnzeringue.SVGToPDFConverter.ElementHandler.Graphics.RectElementHandler;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.ArrayObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.DictionaryObject;
+import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.IndirectObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.IntegerObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.NameObject;
@@ -207,16 +208,18 @@ public class SVGToPDFConverter extends DefaultHandler {
         contentsObject = new IndirectObject(contentsArray);
         contentsReference = contentsObject.getObjectReference();
 
+        writeIndirectObject(contentsObject);
+
         // Write the page object
         pageDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Page"))
                 .addEntry("Contents", contentsReference)
                 .addEntry("MediaBox", new ArrayObject()
-                        .add(new IntegerObject(0))
-                        .add(new IntegerObject(0))
-                        .add(new RealObject(pageWidth))
-                        .add(new RealObject(pageHeight)))
-                .addEntry("Resources", new DictionaryObject());
+                .add(new IntegerObject(0))
+                .add(new IntegerObject(0))
+                .add(new RealObject(pageWidth))
+                .add(new RealObject(pageHeight)))
+                .addEntry("Resources", writeResourceObject());
         pageObject = new IndirectObject(pageDictionary);
         pageReference = pageObject.getObjectReference();
 
@@ -226,20 +229,19 @@ public class SVGToPDFConverter extends DefaultHandler {
                 .addEntry("Count", new IntegerObject(1));
         pagesObject = new IndirectObject(pagesDictionary);
         pagesReference = pagesObject.getObjectReference();
-        
+
         catalogDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Catalog"))
                 .addEntry("Pages", pagesReference);
         catalogObject = new IndirectObject(catalogDictionary);
         catalogReference = catalogObject.getObjectReference();
-        
+
         pageDictionary.addEntry("Parent", pagesReference);
-        
-        writeIndirectObject(contentsObject);
+
         writeIndirectObject(pageObject);
         writeIndirectObject(pagesObject);
         writeIndirectObject(catalogObject);
-        
+
         writeCrossReferenceTable();
         writeTrailer(catalogReference);
     }
@@ -247,15 +249,29 @@ public class SVGToPDFConverter extends DefaultHandler {
     private void writeHeader(double version) {
         _writer.writeHeader(version);
     }
-    
-    private void writeIndirectObject(IndirectObject anObject) {
-        _writer.writeIndirectObject(anObject);
+
+    private IndirectObject writeIndirectObject(IndirectObject anObject) {
+        return _writer.writeIndirectObject(anObject);
     }
-    
+
+    private IndirectObject writeIndirectObject(DirectObject anObject) {
+        return _writer.writeIndirectObject(new IndirectObject(anObject));
+    }
+
+    private ObjectReference writeResourceObject() {
+        DictionaryObject resourceObject = new DictionaryObject();
+
+        // Write graphics states
+        resourceObject.addEntry("ExtGState",
+                GraphicsStates.getInstance().getGraphicStatesDictionary());
+
+        return writeIndirectObject(resourceObject).getObjectReference();
+    }
+
     private void writeCrossReferenceTable() {
         _writer.writeCrossReferenceTable();
     }
-    
+
     private void writeTrailer(ObjectReference root) {
         _writer.writeTrailer(root);
     }

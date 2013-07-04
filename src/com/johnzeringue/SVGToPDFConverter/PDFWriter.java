@@ -55,9 +55,11 @@ public class PDFWriter {
         writeln(String.format(VERSION_FORMAT, version));
     }
     
-    public void writeIndirectObject(IndirectObject anObject) {
+    public IndirectObject writeIndirectObject(IndirectObject anObject) {
         _objectIndices.add(_index);
         writeln(anObject.toString());
+        
+        return anObject;
     }
     
     public void writeCrossReferenceTable() {
