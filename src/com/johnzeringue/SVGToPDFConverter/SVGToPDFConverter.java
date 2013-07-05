@@ -38,8 +38,6 @@ public class SVGToPDFConverter extends DefaultHandler {
     private Stack<ElementHandler> elementHandlers;
     // The number of objects that have been written by this converter
     private int pdfObjectCount;
-    private double pageWidth;
-    private double pageHeight;
     private PDFWriter _writer;
 
     /**
@@ -81,8 +79,8 @@ public class SVGToPDFConverter extends DefaultHandler {
         
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
-        this.pageWidth = width;
-        this.pageHeight = height;
+        DocumentAttributes.getInstance().putValue("width", width + "px");
+        DocumentAttributes.getInstance().putValue("height", height + "px");
         _writer = new PDFWriter(file);
     }
 
@@ -127,7 +125,9 @@ public class SVGToPDFConverter extends DefaultHandler {
             String qName, Attributes atts) throws SAXException {
         // Push the appropriate ElementHandler to the stack
         if (qName.equalsIgnoreCase("SVG")) {
-            elementHandlers.push(new SVGElementHandler(pageWidth, pageHeight));
+            elementHandlers.push(new SVGElementHandler(
+                    DocumentAttributes.getInstance().getWidth(), 
+                    DocumentAttributes.getInstance().getHeight()));
         } else if (qName.equalsIgnoreCase("G")) {
             elementHandlers.push(new GElementHandler());
         } else if (qName.equalsIgnoreCase("Text")) {
@@ -221,8 +221,8 @@ public class SVGToPDFConverter extends DefaultHandler {
                 .addEntry("MediaBox", new ArrayObject()
                 .add(new IntegerObject(0))
                 .add(new IntegerObject(0))
-                .add(new RealObject(pageWidth))
-                .add(new RealObject(pageHeight)))
+                .add(new RealObject(DocumentAttributes.getInstance().getWidth()))
+                .add(new RealObject(DocumentAttributes.getInstance().getHeight())))
                 .addEntry("Resources", writeResourceObject());
         pageObject = new IndirectObject(++pdfObjectCount, pageDictionary);
         pageReference = pageObject.getObjectReference();
