@@ -74,6 +74,11 @@ public class SVGToPDFConverter extends DefaultHandler {
      */
     public SVGToPDFConverter(File file, double width, double height)
             throws FileNotFoundException {
+        // Reset the singleton classes
+        Fonts.getNewInstance();
+        GraphicsStates.getNewInstance();
+        DocumentAttributes.getNewInstance();
+        
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
         this.pageWidth = width;
@@ -126,7 +131,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("G")) {
             elementHandlers.push(new GElementHandler());
         } else if (qName.equalsIgnoreCase("Text")) {
-            elementHandlers.push(new ElementHandler()); // CHANGE THIS BACK!!!
+            elementHandlers.push(new TextElementHandler());
         } else if (qName.equalsIgnoreCase("Rect")) {
             elementHandlers.push(new RectElementHandler());
         } else if (qName.equalsIgnoreCase("Circle")) {
@@ -180,8 +185,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         // See if this ElementHandler has PDF object contents and write it if so.
         if (topElementHandler.hasDirectObject()) {
             writeIndirectObject(
-                    new IndirectObject(topElementHandler.getDirectObject()));
-            pdfObjectCount++;
+                    new IndirectObject(++pdfObjectCount, topElementHandler.getDirectObject()));
         }
 
         // Pop the top ElementHandler off of the stack.
@@ -205,7 +209,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         for (int i = 1; i <= pdfObjectCount; i++) {
             contentsArray.add(new ObjectReference(i));
         }
-        contentsObject = new IndirectObject(contentsArray);
+        contentsObject = new IndirectObject(++pdfObjectCount, contentsArray);
         contentsReference = contentsObject.getObjectReference();
 
         writeIndirectObject(contentsObject);
@@ -220,20 +224,20 @@ public class SVGToPDFConverter extends DefaultHandler {
                 .add(new RealObject(pageWidth))
                 .add(new RealObject(pageHeight)))
                 .addEntry("Resources", writeResourceObject());
-        pageObject = new IndirectObject(pageDictionary);
+        pageObject = new IndirectObject(++pdfObjectCount, pageDictionary);
         pageReference = pageObject.getObjectReference();
 
         pagesDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Pages"))
                 .addEntry("Kids", new ArrayObject().add(pageReference))
                 .addEntry("Count", new IntegerObject(1));
-        pagesObject = new IndirectObject(pagesDictionary);
+        pagesObject = new IndirectObject(++pdfObjectCount, pagesDictionary);
         pagesReference = pagesObject.getObjectReference();
 
         catalogDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Catalog"))
                 .addEntry("Pages", pagesReference);
-        catalogObject = new IndirectObject(catalogDictionary);
+        catalogObject = new IndirectObject(++pdfObjectCount, catalogDictionary);
         catalogReference = catalogObject.getObjectReference();
 
         pageDictionary.addEntry("Parent", pagesReference);
@@ -255,11 +259,14 @@ public class SVGToPDFConverter extends DefaultHandler {
     }
 
     private IndirectObject writeIndirectObject(DirectObject anObject) {
-        return _writer.writeIndirectObject(new IndirectObject(anObject));
+        return _writer.writeIndirectObject(new IndirectObject(++pdfObjectCount, anObject));
     }
 
     private ObjectReference writeResourceObject() {
         DictionaryObject resourceObject = new DictionaryObject();
+        
+        resourceObject.addEntry("Font", 
+                Fonts.getInstance().getFontsDictionary());
 
         // Write graphics states
         resourceObject.addEntry("ExtGState",

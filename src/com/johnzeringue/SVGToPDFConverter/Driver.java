@@ -2,13 +2,10 @@ package com.johnzeringue.SVGToPDFConverter;
 
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
-import javax.swing.UIManager;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.FileFilter;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -29,31 +26,32 @@ public class Driver {
         // Initialize SAX components
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser saxParser = spf.newSAXParser();
+        Timer t = new Timer();
 
-        // Set System L&F
-        UIManager.setLookAndFeel(
-                UIManager.getSystemLookAndFeelClassName());
+        File[] testFiles = new File("./samples").listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().matches(".*\\.svg");
+            }
+        });
 
-        // Create a new file chooser
-        JFileChooser fileChooser = new JFileChooser("./samples");
-        fileChooser.setFileFilter(
-                new FileNameExtensionFilter("SVG file", "svg"));
-
-        // Let the user choose an SVG file and convert it
-        if (fileChooser.showDialog(
-                null, "Convert") == JFileChooser.APPROVE_OPTION) {
-            File svgInput = fileChooser.getSelectedFile();
+        for (File svgInput : testFiles) {
             File pdfOutput =
                     new File(svgInput.getPath().replace(".svg", ".pdf"));
 
-            System.out.println("Working...");
+            System.out.printf("Converting %s...\n", svgInput.getName());
+            
+            t.start();
 
             // Parse the file
-            saxParser.parse(new FileInputStream(svgInput),
+            saxParser.parse(svgInput,
                     new SVGToPDFConverter(pdfOutput, getMaxAndMin(svgInput)));
-
-            System.out.println("Done!");
+            
+            System.out.printf("Generated %s in %d milliseconds.\n",
+                    pdfOutput.getName(), t.check());
         }
+
+        System.out.println("All files have been converted.");
     }
 
     public static Point2D.Double getMaxAndMin(File file) throws Exception {

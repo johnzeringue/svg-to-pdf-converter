@@ -12,32 +12,41 @@ import java.util.Objects;
 public class ArrayObject implements DirectObject {
 
     private List<DirectObject> _contents;
+    private boolean _hasChanged;
+    private TextLines _text;
 
     public ArrayObject() {
         _contents = new ArrayList<>();
+        _hasChanged = false;
+        _text = new TextLines().appendLine("[ ]");
     }
 
     public ArrayObject add(DirectObject anObject) {
         _contents.add(anObject);
+        _hasChanged = true;
 
         return this;
     }
 
     @Override
     public TextLines getTextLines() {
-        TextLines result = new TextLines();
+        if (_hasChanged) {
+            _text = new TextLines();
 
-        for (DirectObject anObject : _contents) {
-            for (TextLine aLine : anObject.getTextLines()) {
-                result.appendLine(aLine);
+            for (DirectObject anObject : _contents) {
+                for (TextLine aLine : anObject.getTextLines()) {
+                    _text.appendLine(aLine);
+                }
             }
+
+            _text.indentTailLinesBy(2);
+            _text.getLineAt(0).prepend("[ ");
+            _text.getLineAt(_text.size() - 1).append(" ]");
+
+            _hasChanged = false;
         }
 
-        result.indentTailLinesBy(2);
-        result.getLineAt(0).prepend("[ ");
-        result.getLineAt(result.size() - 1).append(" ]");
-
-        return result;
+        return _text;
     }
 
     @Override

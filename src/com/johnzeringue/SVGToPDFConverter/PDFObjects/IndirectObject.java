@@ -15,7 +15,6 @@ public class IndirectObject {
             + "%d 0 obj\n"
             + "%s\n"
             + "endobj\n";
-    private static int indirectObjectCount = 0;
     private DirectObject _object;
     private int _indirectObjectNumber;
 
@@ -24,9 +23,9 @@ public class IndirectObject {
      *
      * @param aDirectObject this object's contents
      */
-    public IndirectObject(DirectObject aDirectObject) {
+    public IndirectObject(int indirectObjectNumber, DirectObject aDirectObject) {
         _object = aDirectObject;
-        _indirectObjectNumber = ++indirectObjectCount;
+        _indirectObjectNumber = indirectObjectNumber;
     }
 
     /**

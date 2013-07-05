@@ -61,11 +61,12 @@ public class DictionaryObject implements DirectObject {
                         String.format("%s %s",
                                       anEntry.getKey().getTextLines(),
                                       anEntry.getValue().getTextLines().getLineAt(0)));
+                
+                anEntry.getValue().getTextLines().indentTailLinesBy(keyLength + 1);
 
                 for (int i = 1; i < anEntry.getValue().getTextLines().size(); i++) {
                     _textValue.appendLine(
-                            anEntry.getValue().getTextLines()
-                            .indentTailLinesBy(keyLength + 1).getLineAt(i));
+                            anEntry.getValue().getTextLines().getLineAt(i));
                 }
             }
 

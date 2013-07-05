@@ -1,6 +1,6 @@
 package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 
-import com.johnzeringue.SVGToPDFConverter.DocumentFonts;
+import com.johnzeringue.SVGToPDFConverter.Fonts;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.StreamObject;
 import org.xml.sax.Attributes;
@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
  * @version 05/29/2013
  */
 public class TextElementHandler extends ElementHandler {
+
     private StreamObject _object;
     private StringBuilder _tagContents;
 
@@ -43,16 +44,15 @@ public class TextElementHandler extends ElementHandler {
             fontFamily = docAtts.getValue("font-family");
         }
         fontFamily = fontFamily.replaceAll("'", "");
-        DocumentFonts.getInstance().getFontNumber(fontFamily);
         Double fontSize;
         if (atts.getValue("font-size") == null) {
             fontSize = Double.valueOf(docAtts.getValue("font-size"));
         } else {
             fontSize = Double.valueOf(atts.getValue("font-size"));
         }
-        _object.appendLine(String.format("0.0 g\n/F%d %.1f Tf",
-                DocumentFonts.getInstance().getFontNumber(fontFamily) + 1,
-                fontSize));
+        _object.appendLine("0.0 g");
+        _object.appendLine(String.format("%s %.1f Tf",
+                Fonts.getInstance().getFontTag(fontFamily), fontSize));
         double height = docAtts.getHeight();
         _object.appendLine(String.format("%f %f Td",
                 Double.parseDouble(atts.getValue("x")),
@@ -78,12 +78,12 @@ public class TextElementHandler extends ElementHandler {
         _object.appendLine(String.format("(%s) Tj", _tagContents));
         _object.appendLine("ET");
     }
-    
+
     @Override
     public DirectObject getDirectObject() {
         return _object;
     }
-    
+
     @Override
     public boolean hasDirectObject() {
         return true;
