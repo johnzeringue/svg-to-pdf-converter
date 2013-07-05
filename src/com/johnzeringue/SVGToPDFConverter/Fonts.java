@@ -83,7 +83,7 @@ public class Fonts {
     private void addFont(String font) {
         DictionaryObject fontDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Font"))
-                .addEntry("SubType", new NameObject("Type1"));
+                .addEntry("Subtype", new NameObject("Type1"));
 
         if (STANDARD_14_FONTS.contains(font)) {
             fontDictionary.addEntry("BaseFont", new NameObject(font));

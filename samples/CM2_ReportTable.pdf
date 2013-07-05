@@ -9211,9 +9211,9 @@ endobj
 
 711 0 obj
 << /ExtGState << >>
-   /Font << /F1 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >> >> >>
+   /Font << /F1 << /BaseFont /Helvetica
+                   /Type /Font
+                   /Subtype /Type1 >> >> >>
 endobj
 
 712 0 obj

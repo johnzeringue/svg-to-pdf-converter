@@ -104225,9 +104225,9 @@ endobj
 
 8022 0 obj
 << /ExtGState << >>
-   /Font << /F1 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >> >> >>
+   /Font << /F1 << /BaseFont /Helvetica
+                   /Type /Font
+                   /Subtype /Type1 >> >> >>
 endobj
 
 8023 0 obj

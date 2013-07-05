@@ -2162,9 +2162,9 @@ endobj
                          /Type /ExtGState >>
                  /GS7 << /ca 0.35
                          /Type /ExtGState >> >>
-   /Font << /F1 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >> >> >>
+   /Font << /F1 << /BaseFont /Helvetica
+                   /Type /Font
+                   /Subtype /Type1 >> >> >>
 endobj
 
 131 0 obj
