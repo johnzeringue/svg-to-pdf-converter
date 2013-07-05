@@ -33,11 +33,11 @@ public class Fonts {
         _fontCount = 0;
     }
 
-    public NameObject getFontTag(String font) throws Exception {
+    public NameObject getFontTag(String font) {
+        if (!STANDARD_14_FONTS.contains(font)) {
+            font = "Helvetica";
+        }
         if (!_fontNames.containsKey(font)) {
-            if (!STANDARD_14_FONTS.contains(font)) {
-                font = "Helvetica";
-            }
 
             addFont(font);
         }
@@ -80,7 +80,7 @@ public class Fonts {
         return instance;
     }
 
-    private void addFont(String font) throws Exception {
+    private void addFont(String font) {
         DictionaryObject fontDictionary = new DictionaryObject()
                 .addEntry("Type", new NameObject("Font"))
                 .addEntry("SubType", new NameObject("Type1"));

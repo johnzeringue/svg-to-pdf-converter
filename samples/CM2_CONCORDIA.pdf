@@ -392,7 +392,7 @@ endobj
 stream
 BT
 0.0 g
-/F2 12.0 Tf
+/F1 12.0 Tf
 347.957100 88.998800 Td
 (70.30) Tj
 ET
@@ -435,7 +435,7 @@ endobj
 stream
 BT
 0.0 g
-/F3 12.0 Tf
+/F1 12.0 Tf
 362.703300 135.011600 Td
 (70.35) Tj
 ET
@@ -478,7 +478,7 @@ endobj
 stream
 BT
 0.0 g
-/F4 12.0 Tf
+/F1 12.0 Tf
 377.754900 181.024800 Td
 (70.40) Tj
 ET
@@ -521,7 +521,7 @@ endobj
 stream
 BT
 0.0 g
-/F5 12.0 Tf
+/F1 12.0 Tf
 392.502600 227.038300 Td
 (70.45) Tj
 ET
@@ -564,7 +564,7 @@ endobj
 stream
 BT
 0.0 g
-/F6 12.0 Tf
+/F1 12.0 Tf
 407.555600 273.052200 Td
 (70.50) Tj
 ET
@@ -607,7 +607,7 @@ endobj
 stream
 BT
 0.0 g
-/F7 12.0 Tf
+/F1 12.0 Tf
 422.304700 319.066500 Td
 (70.55) Tj
 ET
@@ -650,7 +650,7 @@ endobj
 stream
 BT
 0.0 g
-/F8 12.0 Tf
+/F1 12.0 Tf
 437.359300 365.081100 Td
 (70.60) Tj
 ET
@@ -693,7 +693,7 @@ endobj
 stream
 BT
 0.0 g
-/F9 12.0 Tf
+/F1 12.0 Tf
 452.109900 411.096100 Td
 (70.65) Tj
 ET
@@ -732,11 +732,11 @@ endstream
 endobj
 
 40 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F10 12.0 Tf
+/F1 12.0 Tf
 467.165900 457.111400 Td
 (70.70) Tj
 ET
@@ -775,11 +775,11 @@ endstream
 endobj
 
 43 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F11 12.0 Tf
+/F1 12.0 Tf
 481.918000 503.127100 Td
 (70.75) Tj
 ET
@@ -818,11 +818,11 @@ endstream
 endobj
 
 46 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F12 12.0 Tf
+/F1 12.0 Tf
 496.975500 549.143200 Td
 (70.80) Tj
 ET
@@ -861,11 +861,11 @@ endstream
 endobj
 
 49 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F13 12.0 Tf
+/F1 12.0 Tf
 511.728900 595.159600 Td
 (70.85) Tj
 ET
@@ -1571,11 +1571,11 @@ endstream
 endobj
 
 93 0 obj
-<< /Length 58 >>
+<< /Length 57 >>
 stream
 BT
 0.0 g
-/F14 18.0 Tf
+/F1 18.0 Tf
 110.000000 528.000000 Td
 (CM2) Tj
 ET
@@ -1583,11 +1583,11 @@ endstream
 endobj
 
 94 0 obj
-<< /Length 69 >>
+<< /Length 68 >>
 stream
 BT
 0.0 g
-/F15 18.0 Tf
+/F1 16.0 Tf
 110.000000 501.000000 Td
 (synthetic data) Tj
 ET
@@ -1607,11 +1607,11 @@ endstream
 endobj
 
 96 0 obj
-<< /Length 59 >>
+<< /Length 58 >>
 stream
 BT
 0.0 g
-/F16 18.0 Tf
+/F1 12.0 Tf
 40.019000 20.000000 Td
 (0.0705) Tj
 ET
@@ -1631,11 +1631,11 @@ endstream
 endobj
 
 98 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F17 18.0 Tf
+/F1 12.0 Tf
 181.249600 20.000000 Td
 (0.0710) Tj
 ET
@@ -1655,11 +1655,11 @@ endstream
 endobj
 
 100 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F18 18.0 Tf
+/F1 12.0 Tf
 322.327800 20.000000 Td
 (0.0715) Tj
 ET
@@ -1679,11 +1679,11 @@ endstream
 endobj
 
 102 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F19 18.0 Tf
+/F1 12.0 Tf
 463.558300 20.000000 Td
 (0.0720) Tj
 ET
@@ -1703,11 +1703,11 @@ endstream
 endobj
 
 104 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F20 18.0 Tf
+/F1 12.0 Tf
 604.636500 20.000000 Td
 (0.0725) Tj
 ET
@@ -1727,11 +1727,11 @@ endstream
 endobj
 
 106 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F21 18.0 Tf
+/F1 12.0 Tf
 745.867000 20.000000 Td
 (0.0730) Tj
 ET
@@ -1751,11 +1751,11 @@ endstream
 endobj
 
 108 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F22 18.0 Tf
+/F1 12.0 Tf
 886.945200 20.000000 Td
 (0.0735) Tj
 ET
@@ -1775,11 +1775,11 @@ endstream
 endobj
 
 110 0 obj
-<< /Length 60 >>
+<< /Length 59 >>
 stream
 BT
 0.0 g
-/F23 18.0 Tf
+/F1 12.0 Tf
 16.000000 38.680200 Td
 (0.01096) Tj
 ET
@@ -1799,11 +1799,11 @@ endstream
 endobj
 
 112 0 obj
-<< /Length 61 >>
+<< /Length 60 >>
 stream
 BT
 0.0 g
-/F24 18.0 Tf
+/F1 12.0 Tf
 16.000000 156.174800 Td
 (0.01098) Tj
 ET
@@ -1823,11 +1823,11 @@ endstream
 endobj
 
 114 0 obj
-<< /Length 61 >>
+<< /Length 60 >>
 stream
 BT
 0.0 g
-/F25 18.0 Tf
+/F1 12.0 Tf
 16.000000 273.537500 Td
 (0.01100) Tj
 ET
@@ -1847,11 +1847,11 @@ endstream
 endobj
 
 116 0 obj
-<< /Length 61 >>
+<< /Length 60 >>
 stream
 BT
 0.0 g
-/F26 18.0 Tf
+/F1 12.0 Tf
 16.000000 390.950100 Td
 (0.01102) Tj
 ET
@@ -1871,11 +1871,11 @@ endstream
 endobj
 
 118 0 obj
-<< /Length 61 >>
+<< /Length 60 >>
 stream
 BT
 0.0 g
-/F27 18.0 Tf
+/F1 12.0 Tf
 16.000000 508.315800 Td
 (0.01104) Tj
 ET
@@ -1895,11 +1895,11 @@ endstream
 endobj
 
 120 0 obj
-<< /Length 57 >>
+<< /Length 56 >>
 stream
 BT
 0.0 g
-/F28 18.0 Tf
+/F1 14.0 Tf
 807.000000 51.000000 Td
 (207) Tj
 ET
@@ -1907,11 +1907,11 @@ endstream
 endobj
 
 121 0 obj
-<< /Length 57 >>
+<< /Length 56 >>
 stream
 BT
 0.0 g
-/F29 18.0 Tf
+/F1 20.0 Tf
 830.800000 43.000000 Td
 (Pb/) Tj
 ET
@@ -1919,11 +1919,11 @@ endstream
 endobj
 
 122 0 obj
-<< /Length 57 >>
+<< /Length 56 >>
 stream
 BT
 0.0 g
-/F30 18.0 Tf
+/F1 14.0 Tf
 865.800000 51.000000 Td
 (235) Tj
 ET
@@ -1931,11 +1931,11 @@ endstream
 endobj
 
 123 0 obj
-<< /Length 55 >>
+<< /Length 54 >>
 stream
 BT
 0.0 g
-/F31 18.0 Tf
+/F1 20.0 Tf
 891.000000 43.000000 Td
 (U) Tj
 ET
@@ -1943,11 +1943,11 @@ endstream
 endobj
 
 124 0 obj
-<< /Length 59 >>
+<< /Length 58 >>
 stream
 BT
 0.0 g
-/F32 18.0 Tf
+/F1 14.0 Tf
 -109.000000 559.000000 Td
 (206) Tj
 ET
@@ -1955,11 +1955,11 @@ endstream
 endobj
 
 125 0 obj
-<< /Length 58 >>
+<< /Length 57 >>
 stream
 BT
 0.0 g
-/F33 18.0 Tf
+/F1 20.0 Tf
 -85.200000 551.000000 Td
 (Pb/) Tj
 ET
@@ -1967,11 +1967,11 @@ endstream
 endobj
 
 126 0 obj
-<< /Length 58 >>
+<< /Length 57 >>
 stream
 BT
 0.0 g
-/F34 18.0 Tf
+/F1 14.0 Tf
 -52.200000 559.000000 Td
 (238) Tj
 ET
@@ -1979,11 +1979,11 @@ endstream
 endobj
 
 127 0 obj
-<< /Length 56 >>
+<< /Length 55 >>
 stream
 BT
 0.0 g
-/F35 18.0 Tf
+/F1 20.0 Tf
 -27.000000 551.000000 Td
 (U) Tj
 ET
@@ -1991,11 +1991,11 @@ endstream
 endobj
 
 128 0 obj
-<< /Length 54 >>
+<< /Length 53 >>
 stream
 BT
 0.0 g
-/F36 18.0 Tf
+/F1 14.0 Tf
 70.000000 584.000000 Td
 () Tj
 ET
@@ -2162,114 +2162,9 @@ endobj
                          /Type /ExtGState >>
                  /GS7 << /ca 0.35
                          /Type /ExtGState >> >>
-   /Font << /F29 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F28 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F27 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F21 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F22 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F20 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F25 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F26 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F23 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F24 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F16 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F17 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F18 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F19 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F2 << /SubType /Type1
+   /Font << /F1 << /SubType /Type1
                    /BaseFont /Helvetica
-                   /Type /Font >>
-            /F13 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F12 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F1 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F4 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F15 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F3 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F14 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F6 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F5 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F8 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F11 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F7 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F10 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F30 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F9 << /SubType /Type1
-                   /BaseFont /Helvetica
-                   /Type /Font >>
-            /F31 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F32 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F33 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F34 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F35 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >>
-            /F36 << /SubType /Type1
-                    /BaseFont /Helvetica
-                    /Type /Font >> >> >>
+                   /Type /Font >> >> >>
 endobj
 
 131 0 obj
@@ -2337,103 +2232,103 @@ xref
 0000017703 00000 n 
 0000018077 00000 n 
 0000018457 00000 n 
-0000018569 00000 n 
-0000018943 00000 n 
-0000019323 00000 n 
-0000019435 00000 n 
-0000019809 00000 n 
-0000020189 00000 n 
-0000020301 00000 n 
-0000020675 00000 n 
-0000021055 00000 n 
-0000021167 00000 n 
-0000021551 00000 n 
-0000021935 00000 n 
-0000022319 00000 n 
-0000022703 00000 n 
-0000023087 00000 n 
-0000023471 00000 n 
-0000023855 00000 n 
-0000024239 00000 n 
-0000024623 00000 n 
-0000025008 00000 n 
-0000025393 00000 n 
-0000025778 00000 n 
-0000026163 00000 n 
-0000026548 00000 n 
-0000026930 00000 n 
-0000027304 00000 n 
-0000027686 00000 n 
-0000028060 00000 n 
-0000028442 00000 n 
-0000028816 00000 n 
-0000029198 00000 n 
-0000029572 00000 n 
-0000029954 00000 n 
-0000030328 00000 n 
-0000030710 00000 n 
-0000031084 00000 n 
-0000031466 00000 n 
-0000031840 00000 n 
-0000032222 00000 n 
-0000032596 00000 n 
-0000032978 00000 n 
-0000033352 00000 n 
-0000033734 00000 n 
-0000034108 00000 n 
-0000034490 00000 n 
-0000034864 00000 n 
-0000035246 00000 n 
-0000035620 00000 n 
-0000036002 00000 n 
-0000036376 00000 n 
-0000036758 00000 n 
-0000037132 00000 n 
-0000037231 00000 n 
-0000037341 00000 n 
-0000037462 00000 n 
-0000037559 00000 n 
-0000037670 00000 n 
-0000037769 00000 n 
-0000037881 00000 n 
-0000037980 00000 n 
-0000038093 00000 n 
-0000038193 00000 n 
-0000038306 00000 n 
-0000038406 00000 n 
-0000038519 00000 n 
-0000038619 00000 n 
-0000038732 00000 n 
-0000038832 00000 n 
-0000038945 00000 n 
-0000039043 00000 n 
-0000039156 00000 n 
-0000039256 00000 n 
-0000039370 00000 n 
-0000039470 00000 n 
-0000039584 00000 n 
-0000039684 00000 n 
-0000039798 00000 n 
-0000039898 00000 n 
-0000040012 00000 n 
-0000040111 00000 n 
-0000040221 00000 n 
-0000040331 00000 n 
-0000040441 00000 n 
-0000040549 00000 n 
-0000040661 00000 n 
-0000040772 00000 n 
-0000040883 00000 n 
-0000040992 00000 n 
-0000041099 00000 n 
-0000042291 00000 n 
-0000047439 00000 n 
-0000047618 00000 n 
-0000047688 00000 n 
+0000018568 00000 n 
+0000018942 00000 n 
+0000019322 00000 n 
+0000019433 00000 n 
+0000019807 00000 n 
+0000020187 00000 n 
+0000020298 00000 n 
+0000020672 00000 n 
+0000021052 00000 n 
+0000021163 00000 n 
+0000021547 00000 n 
+0000021931 00000 n 
+0000022315 00000 n 
+0000022699 00000 n 
+0000023083 00000 n 
+0000023467 00000 n 
+0000023851 00000 n 
+0000024235 00000 n 
+0000024619 00000 n 
+0000025004 00000 n 
+0000025389 00000 n 
+0000025774 00000 n 
+0000026159 00000 n 
+0000026544 00000 n 
+0000026926 00000 n 
+0000027300 00000 n 
+0000027682 00000 n 
+0000028056 00000 n 
+0000028438 00000 n 
+0000028812 00000 n 
+0000029194 00000 n 
+0000029568 00000 n 
+0000029950 00000 n 
+0000030324 00000 n 
+0000030706 00000 n 
+0000031080 00000 n 
+0000031462 00000 n 
+0000031836 00000 n 
+0000032218 00000 n 
+0000032592 00000 n 
+0000032974 00000 n 
+0000033348 00000 n 
+0000033730 00000 n 
+0000034104 00000 n 
+0000034486 00000 n 
+0000034860 00000 n 
+0000035242 00000 n 
+0000035616 00000 n 
+0000035998 00000 n 
+0000036372 00000 n 
+0000036754 00000 n 
+0000037128 00000 n 
+0000037227 00000 n 
+0000037336 00000 n 
+0000037456 00000 n 
+0000037553 00000 n 
+0000037663 00000 n 
+0000037762 00000 n 
+0000037873 00000 n 
+0000037972 00000 n 
+0000038084 00000 n 
+0000038184 00000 n 
+0000038296 00000 n 
+0000038396 00000 n 
+0000038508 00000 n 
+0000038608 00000 n 
+0000038720 00000 n 
+0000038820 00000 n 
+0000038932 00000 n 
+0000039030 00000 n 
+0000039142 00000 n 
+0000039242 00000 n 
+0000039355 00000 n 
+0000039455 00000 n 
+0000039568 00000 n 
+0000039668 00000 n 
+0000039781 00000 n 
+0000039881 00000 n 
+0000039994 00000 n 
+0000040093 00000 n 
+0000040202 00000 n 
+0000040311 00000 n 
+0000040420 00000 n 
+0000040527 00000 n 
+0000040638 00000 n 
+0000040748 00000 n 
+0000040858 00000 n 
+0000040966 00000 n 
+0000041072 00000 n 
+0000042264 00000 n 
+0000043516 00000 n 
+0000043695 00000 n 
+0000043765 00000 n 
 
 trailer
   << /Size 134
      /Root 133 0 R >>
 startxref
-47745
+43822
 %%EOF

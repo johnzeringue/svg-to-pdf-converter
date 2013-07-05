@@ -3,6 +3,7 @@ package com.johnzeringue.SVGToPDFConverter.ElementHandler;
 import com.johnzeringue.SVGToPDFConverter.Fonts;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.DirectObject;
 import com.johnzeringue.SVGToPDFConverter.PDFObjects.StreamObject;
+import java.util.regex.Pattern;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -13,12 +14,16 @@ import org.xml.sax.SAXException;
  * @version 05/29/2013
  */
 public class TextElementHandler extends ElementHandler {
-
+    private static final Pattern TRANSLATE_PATTERN = null;
+    private static final Pattern ROTATE_PATTERN = null;
+    
+    private GElementHandler _gElementHandler;
     private StreamObject _object;
     private StringBuilder _tagContents;
 
     public TextElementHandler() {
         super();
+        _gElementHandler = new GElementHandler();
         _tagContents = new StringBuilder();
         _object = new StreamObject();
     }
@@ -37,23 +42,21 @@ public class TextElementHandler extends ElementHandler {
     @Override
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
-        /* Build text object */
+        _gElementHandler.startElement(namespaceURI, localName, qName, atts);
+        
         _object.appendLine("BT");
-        String fontFamily = atts.getValue("font-family");
-        if (fontFamily == null) {
-            fontFamily = docAtts.getValue("font-family");
-        }
-        fontFamily = fontFamily.replaceAll("'", "");
-        Double fontSize;
-        if (atts.getValue("font-size") == null) {
-            fontSize = Double.valueOf(docAtts.getValue("font-size"));
-        } else {
-            fontSize = Double.valueOf(atts.getValue("font-size"));
-        }
+        
+        String fontFamily = docAtts.getValue("font-family").replaceAll("'", "");
+        Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
+        
+        parseTransform();
+        
         _object.appendLine("0.0 g");
         _object.appendLine(String.format("%s %.1f Tf",
                 Fonts.getInstance().getFontTag(fontFamily), fontSize));
+        
         double height = docAtts.getHeight();
+        
         _object.appendLine(String.format("%f %f Td",
                 Double.parseDouble(atts.getValue("x")),
                 height - Double.parseDouble(atts.getValue("y"))));
@@ -77,6 +80,16 @@ public class TextElementHandler extends ElementHandler {
             throws SAXException {
         _object.appendLine(String.format("(%s) Tj", _tagContents));
         _object.appendLine("ET");
+        
+        _gElementHandler.endElement(namespaceURI, localName, qName);
+    }
+    
+    private void parseTransform() {
+        String transform = docAtts.getValue("transform");
+        
+        if (transform != null) {
+            
+        }
     }
 
     @Override
