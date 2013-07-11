@@ -83,9 +83,7 @@ public class DictionaryObject implements DirectObject {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + (this._hasChanged ? 1 : 0);
         hash = 13 * hash + Objects.hashCode(this._map);
-        hash = 13 * hash + Objects.hashCode(this._textValue);
         return hash;
     }
 
@@ -98,9 +96,6 @@ public class DictionaryObject implements DirectObject {
             return false;
         }
         final DictionaryObject other = (DictionaryObject) obj;
-        if (!Objects.equals(this._map, other._map)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this._map, other._map);
     }
 }
