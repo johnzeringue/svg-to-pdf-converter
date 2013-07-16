@@ -22,10 +22,10 @@ public class TextElementHandler extends ElementHandler {
     private static final String COMMA_WSP = WSPS + "," + WSPS;
     private static final String NUMBER = "(-?\\d+(?:\\.\\d+)?)";
     private static final String TRANSLATE_PATTERN =
-            "translate" + WSPS + "(" + WSPS + NUMBER + COMMA_WSP + NUMBER
-            + WSPS + ")" + WSPS;
+            "translate" + WSPS + "\\(" + WSPS + NUMBER + COMMA_WSP + NUMBER
+            + WSPS + "\\)" + WSPS;
     private static final String ROTATE_PATTERN =
-            "rotate" + WSPS + "(" + WSPS + NUMBER + WSPS + ")" + WSPS;
+            "rotate" + WSPS + "\\(" + WSPS + NUMBER + WSPS + "\\)" + WSPS;
     private GElementHandler _gElementHandler;
     private StreamObject _object;
     private StringBuilder _tagContents;
@@ -122,10 +122,8 @@ public class TextElementHandler extends ElementHandler {
         Matcher m = _rotatePattern.matcher(s);
 
         if (m.lookingAt()) {
-            double tx = Double.parseDouble(m.group(1));
-            double ty = -1 * Double.parseDouble(m.group(2));
 
-            return s.replaceFirst(ROTATE_PATTERN, "");
+            return s.substring(m.end());
         } else {
             throw new IllegalArgumentException("Unrecognized rotate format");
         }
@@ -135,10 +133,12 @@ public class TextElementHandler extends ElementHandler {
         Matcher m = _translatePattern.matcher(s);
 
         if (m.lookingAt()) {
-            // parse match
+            double tx = Double.parseDouble(m.group(1));
+            double ty = -1 * Double.parseDouble(m.group(2));
 
-            return s.replaceFirst(TRANSLATE_PATTERN, s);
+            return s.substring(m.end());
         } else {
+            System.out.println(s);
             throw new IllegalArgumentException("Unrecognized translate format");
         }
     }

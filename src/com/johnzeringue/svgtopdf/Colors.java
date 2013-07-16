@@ -42,6 +42,10 @@ public class Colors {
         Pattern c = Pattern.compile(
                 "\\Argb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)\\z");
         Matcher m;
+        
+        if (s == null) {
+            return null;
+        }
 
         if (s.matches("\\A\\p{Lower}+\\z")) {
             return ColorValue.valueOf(s.toUpperCase(Locale.ENGLISH)).color();
@@ -49,6 +53,8 @@ public class Colors {
             return new Color(Integer.valueOf(m.group(1)), // r
                     Integer.valueOf(m.group(2)), // g
                     Integer.valueOf(m.group(3))); // b
+        } else if (s.charAt(0) == '#') {
+            return new Color(Integer.parseInt(s.substring(1), 16));
         } else {
             return null;
         }

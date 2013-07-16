@@ -80,7 +80,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         Fonts.getNewInstance();
         GraphicsStates.getNewInstance();
         DocumentAttributes.getNewInstance();
-        
+
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
         DocumentAttributes.getInstance().putValue("width", width + "px");
@@ -101,7 +101,12 @@ public class SVGToPDFConverter extends DefaultHandler {
     @Override
     public InputSource resolveEntity(String publicId, String systemId)
             throws IOException, SAXException {
-        return new InputSource(new FileInputStream("resources/svg10.dtd"));
+        if (systemId.contains("svg10.dtd")) {
+            return new InputSource(new FileInputStream("resources/svg10.dtd"));
+        } else {
+            // Should ignore other DTDs
+            return new InputSource(new FileInputStream(""));
+        }
     }
 
     /**
@@ -130,7 +135,7 @@ public class SVGToPDFConverter extends DefaultHandler {
         // Push the appropriate ElementHandler to the stack
         if (qName.equalsIgnoreCase("SVG")) {
             elementHandlers.push(new SVGElementHandler(
-                    DocumentAttributes.getInstance().getWidth(), 
+                    DocumentAttributes.getInstance().getWidth(),
                     DocumentAttributes.getInstance().getHeight()));
         } else if (qName.equalsIgnoreCase("G")) {
             elementHandlers.push(new GElementHandler());
@@ -268,8 +273,8 @@ public class SVGToPDFConverter extends DefaultHandler {
 
     private ObjectReference writeResourceObject() {
         DictionaryObject resourceObject = new DictionaryObject();
-        
-        resourceObject.addEntry("Font", 
+
+        resourceObject.addEntry("Font",
                 Fonts.getInstance().getFontsDictionary());
 
         // Write graphics states
