@@ -1,6 +1,5 @@
 package com.johnzeringue.svgtopdf.handlers;
 
-import Jama.Matrix;
 import com.johnzeringue.svgtopdf.Fonts;
 import com.johnzeringue.svgtopdf.objects.DirectObject;
 import com.johnzeringue.svgtopdf.objects.StreamObject;
@@ -31,7 +30,6 @@ public class TextElementHandler extends ElementHandler {
     private StringBuilder _tagContents;
     private Pattern _translatePattern;
     private Pattern _rotatePattern;
-    private Matrix _transformMatrix;
 
     public TextElementHandler() {
         super();
@@ -40,7 +38,6 @@ public class TextElementHandler extends ElementHandler {
         _object = new StreamObject();
         _translatePattern = Pattern.compile(TRANSLATE_PATTERN);
         _rotatePattern = Pattern.compile(ROTATE_PATTERN);
-        _transformMatrix = Matrix.identity(3, 3);
     }
 
     /**
@@ -59,6 +56,8 @@ public class TextElementHandler extends ElementHandler {
             String qName, Attributes atts) throws SAXException {
         _gElementHandler.startElement(namespaceURI, localName, qName, atts);
 
+        _object.appendLine("q");
+        
         _object.appendLine("BT");
 
         String fontFamily = docAtts.getValue("font-family").replaceAll("'", "");
@@ -95,13 +94,13 @@ public class TextElementHandler extends ElementHandler {
             throws SAXException {
         _object.appendLine(String.format("(%s) Tj", _tagContents));
         _object.appendLine("ET");
+        
+        _object.appendLine("Q");
 
         _gElementHandler.endElement(namespaceURI, localName, qName);
     }
 
     private void parseTransform() {
-        Matrix transformMatrix;
-
         String transform = docAtts.getValue("transform");
 
         while (transform != null && !transform.equals("")) {
@@ -114,14 +113,25 @@ public class TextElementHandler extends ElementHandler {
                     break;
             }
         }
-        
-        // Write transform matrix to stream
     }
 
     private String parseRotate(String s) {
         Matcher m = _rotatePattern.matcher(s);
 
         if (m.lookingAt()) {
+            double rotateAngle = -1 * Double.parseDouble(m.group(1)) * Math.PI / 180;
+
+            _object.appendLine(
+                String.format("%f %f %f %f %f %f cm",
+                1.0, 0.0, 0.0, 1.0, 0.0, docAtts.getHeight()));
+            _object.appendLine(
+                String.format("%f %f %f %f %f %f cm",
+                     Math.cos(rotateAngle), Math.sin(rotateAngle),
+                -1 * Math.sin(rotateAngle), Math.cos(rotateAngle),
+                0.0, 0.0));
+            _object.appendLine(
+                String.format("%f %f %f %f %f %f cm",
+                1.0, 0.0, 0.0, 1.0, 0.0, -1 * docAtts.getHeight()));
 
             return s.substring(m.end());
         } else {
@@ -136,9 +146,12 @@ public class TextElementHandler extends ElementHandler {
             double tx = Double.parseDouble(m.group(1));
             double ty = -1 * Double.parseDouble(m.group(2));
 
+            _object.appendLine(
+                String.format("%f %f %f %f %f %f cm",
+                1.0, 0.0, 0.0, 1.0, tx, ty));
+
             return s.substring(m.end());
         } else {
-            System.out.println(s);
             throw new IllegalArgumentException("Unrecognized translate format");
         }
     }
