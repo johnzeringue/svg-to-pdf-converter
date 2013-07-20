@@ -45,7 +45,7 @@ public class Driver {
 
             // Parse the file
             saxParser.parse(svgInput,
-                    new SVGToPDFConverter(pdfOutput, getMaxAndMin(svgInput)));
+                    new SVGToPDFHandler(pdfOutput, getMaxAndMin(svgInput)));
             
             System.out.printf("Generated %s in %d milliseconds.\n",
                     pdfOutput.getName(), t.check());
