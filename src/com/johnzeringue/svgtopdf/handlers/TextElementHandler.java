@@ -3,6 +3,7 @@ package com.johnzeringue.svgtopdf.handlers;
 import com.johnzeringue.svgtopdf.Fonts;
 import com.johnzeringue.svgtopdf.objects.DirectObject;
 import com.johnzeringue.svgtopdf.objects.StreamObject;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.xml.sax.Attributes;
@@ -57,13 +58,13 @@ public class TextElementHandler extends ElementHandler {
         _gElementHandler.startElement(namespaceURI, localName, qName, atts);
 
         _object.appendLine("q");
-        
+
         _object.appendLine("BT");
+
+        parseTransform();
 
         String fontFamily = docAtts.getValue("font-family").replaceAll("'", "");
         Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
-
-        parseTransform();
 
         _object.appendLine("0.0 g");
         _object.appendLine(String.format("%s %.1f Tf",
@@ -92,9 +93,35 @@ public class TextElementHandler extends ElementHandler {
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
-        _object.appendLine(String.format("(%s) Tj", _tagContents));
+        int start = 0;
+        for (int i = 0; i < _tagContents.length(); i++) {
+            if (_tagContents.charAt(i) > 127) {
+                _object.appendLine(String.format("(%s) Tj", _tagContents.substring(start, i)));
+
+                _object.appendLine("q");
+
+                Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
+                _object.appendLine(String.format("%s %.1f Tf",
+                        Fonts.getInstance().getFontTag("Symbol"), fontSize));
+
+                if ((int) _tagContents.charAt(i) == 955) { // lambda
+                    _object.appendLine(String.format("(%s) Tj", (char) 108));
+                } else if ((int) _tagContents.charAt(i) == 963) { // sigma
+                    _object.appendLine(String.format("(%s) Tj", (char) 115));
+                } else { // plus minus
+                    _object.appendLine("(\\261) Tj");
+                }
+                
+                start = i + 1;
+
+                _object.appendLine("Q");
+            }
+        }
+
+        _object.appendLine(String.format("(%s) Tj", _tagContents.substring(start)));
+
         _object.appendLine("ET");
-        
+
         _object.appendLine("Q");
 
         _gElementHandler.endElement(namespaceURI, localName, qName);
@@ -122,16 +149,16 @@ public class TextElementHandler extends ElementHandler {
             double rotateAngle = -1 * Double.parseDouble(m.group(1)) * Math.PI / 180;
 
             _object.appendLine(
-                String.format("%f %f %f %f %f %f cm",
-                1.0, 0.0, 0.0, 1.0, 0.0, docAtts.getHeight()));
+                    String.format("%f %f %f %f %f %f cm",
+                    1.0, 0.0, 0.0, 1.0, 0.0, docAtts.getHeight()));
             _object.appendLine(
-                String.format("%f %f %f %f %f %f cm",
-                     Math.cos(rotateAngle), Math.sin(rotateAngle),
-                -1 * Math.sin(rotateAngle), Math.cos(rotateAngle),
-                0.0, 0.0));
+                    String.format("%f %f %f %f %f %f cm",
+                    Math.cos(rotateAngle), Math.sin(rotateAngle),
+                    -1 * Math.sin(rotateAngle), Math.cos(rotateAngle),
+                    0.0, 0.0));
             _object.appendLine(
-                String.format("%f %f %f %f %f %f cm",
-                1.0, 0.0, 0.0, 1.0, 0.0, -1 * docAtts.getHeight()));
+                    String.format("%f %f %f %f %f %f cm",
+                    1.0, 0.0, 0.0, 1.0, 0.0, -1 * docAtts.getHeight()));
 
             return s.substring(m.end());
         } else {
@@ -147,8 +174,8 @@ public class TextElementHandler extends ElementHandler {
             double ty = -1 * Double.parseDouble(m.group(2));
 
             _object.appendLine(
-                String.format("%f %f %f %f %f %f cm",
-                1.0, 0.0, 0.0, 1.0, tx, ty));
+                    String.format("%f %f %f %f %f %f cm",
+                    1.0, 0.0, 0.0, 1.0, tx, ty));
 
             return s.substring(m.end());
         } else {
