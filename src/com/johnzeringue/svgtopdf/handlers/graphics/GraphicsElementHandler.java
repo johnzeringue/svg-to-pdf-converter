@@ -28,6 +28,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     public GraphicsElementHandler() {
         _object = new StreamObject();
         _hasDirectObject = true;
+        _hasFill = false;
+        _hasStroke = false;
     }
 
     /**
@@ -35,11 +37,18 @@ public abstract class GraphicsElementHandler extends ElementHandler {
      */
     @Override
     public final void startElement() {
+        
+        if (ClipPaths.getInstance().isBuildingNewClipPath()) {
+            _hasDirectObject = false;
 
-        _hasFill = getValueAsColor("fill") != null;
-        _hasStroke = getValueAsColor("stroke") != null;
+            drawPath();
 
-        if (_hasFill || _hasStroke) {
+            ClipPaths.getInstance().addClipPathContent(
+                    _object.getText()
+                    .removeLineAt(0)
+                    .removeLineAt(0)
+                    .removeLineAt(_object.getText().lineCount() - 3));
+        } else {
             saveGraphicsState();
 
             setClipPath();
@@ -57,16 +66,6 @@ public abstract class GraphicsElementHandler extends ElementHandler {
             closePath();
 
             restoreGraphicsState();
-        } else if (ClipPaths.getInstance().isBuildingNewClipPath()) { // For clipping paths
-            _hasDirectObject = false;
-
-            drawPath();
-
-            ClipPaths.getInstance().addClipPathContent(
-                    _object.getText()
-                    .removeLineAt(0)
-                    .removeLineAt(0)
-                    .removeLineAt(_object.getText().lineCount() - 3));
         }
     }
 
@@ -85,6 +84,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
                     fillColor.getRed() / 255.0,
                     fillColor.getGreen() / 255.0,
                     fillColor.getBlue() / 255.0));
+            
+            _hasFill = true;
         }
     }
 
@@ -97,6 +98,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
                     strokeColor.getRed() / 255.0,
                     strokeColor.getGreen() / 255.0,
                     strokeColor.getBlue() / 255.0));
+            
+            _hasStroke = true;
         }
     }
 
