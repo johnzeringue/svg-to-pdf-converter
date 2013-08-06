@@ -57,7 +57,11 @@ public class ElementHandler extends DefaultHandler {
                 continue;
             }
 
-            currentAttributes.putValue(atts.getQName(i), atts.getValue(i));
+            try {
+                currentAttributes.putValue(atts.getQName(i), atts.getValue(i));
+            } catch (IllegalArgumentException ex) {
+                // I think this is when the qualified name has a colon
+            }
         }
 
         // Add the new Attributes object to DocumentAttributes
@@ -82,7 +86,7 @@ public class ElementHandler extends DefaultHandler {
     public final void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
         endElement();
-        
+
         docAtts.removeScope();
     }
 
