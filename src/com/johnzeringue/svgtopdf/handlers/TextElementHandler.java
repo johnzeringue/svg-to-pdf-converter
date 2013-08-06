@@ -26,7 +26,6 @@ public class TextElementHandler extends ElementHandler {
             + WSPS + "\\)" + WSPS;
     private static final String ROTATE_PATTERN =
             "rotate" + WSPS + "\\(" + WSPS + NUMBER + WSPS + "\\)" + WSPS;
-    private GElementHandler _gElementHandler;
     private StreamObject _object;
     private StringBuilder _tagContents;
     private Pattern _translatePattern;
@@ -34,7 +33,6 @@ public class TextElementHandler extends ElementHandler {
 
     public TextElementHandler() {
         super();
-        _gElementHandler = new GElementHandler();
         _tagContents = new StringBuilder();
         _object = new StreamObject();
         _translatePattern = Pattern.compile(TRANSLATE_PATTERN);
@@ -53,9 +51,7 @@ public class TextElementHandler extends ElementHandler {
      * @throws SAXException
      */
     @Override
-    public void startElement(String namespaceURI, String localName,
-            String qName, Attributes atts) throws SAXException {
-        _gElementHandler.startElement(namespaceURI, localName, qName, atts);
+    public void startElement() {
 
         _object.append("q");
 
@@ -73,8 +69,8 @@ public class TextElementHandler extends ElementHandler {
         double height = docAtts.getHeight();
 
         _object.append(String.format("%f %f Td",
-                Double.parseDouble(atts.getValue("x")),
-                height - Double.parseDouble(atts.getValue("y"))));
+                Double.parseDouble(docAtts.getValue("x")),
+                height - Double.parseDouble(docAtts.getValue("y"))));
     }
 
     @Override
@@ -91,8 +87,7 @@ public class TextElementHandler extends ElementHandler {
      * @throws SAXException
      */
     @Override
-    public void endElement(String namespaceURI, String localName, String qName)
-            throws SAXException {
+    public void endElement() {
         int start = 0;
         for (int i = 0; i < _tagContents.length(); i++) {
             if (_tagContents.charAt(i) > 127) {
@@ -119,12 +114,8 @@ public class TextElementHandler extends ElementHandler {
         }
 
         _object.append(String.format("(%s) Tj", _tagContents.substring(start)));
-
         _object.append("ET");
-
         _object.append("Q");
-
-        _gElementHandler.endElement(namespaceURI, localName, qName);
     }
 
     private void parseTransform() {

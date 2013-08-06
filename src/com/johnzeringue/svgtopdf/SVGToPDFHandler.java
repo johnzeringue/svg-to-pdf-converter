@@ -2,7 +2,6 @@ package com.johnzeringue.svgtopdf;
 
 import com.johnzeringue.svgtopdf.handlers.TextElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ClipPathElementHandler;
-import com.johnzeringue.svgtopdf.handlers.GElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ElementHandler;
 import com.johnzeringue.svgtopdf.handlers.SVGElementHandler;
 import com.johnzeringue.svgtopdf.objects.RealObject;
@@ -138,8 +137,6 @@ public class SVGToPDFHandler extends DefaultHandler {
             elementHandlers.push(new SVGElementHandler(
                     DocumentAttributes.getInstance().getWidth(),
                     DocumentAttributes.getInstance().getHeight()));
-        } else if (qName.equalsIgnoreCase("G")) {
-            elementHandlers.push(new GElementHandler());
         } else if (qName.equalsIgnoreCase("Text")) {
             elementHandlers.push(new TextElementHandler());
         } else if (qName.equalsIgnoreCase("Rect")) {

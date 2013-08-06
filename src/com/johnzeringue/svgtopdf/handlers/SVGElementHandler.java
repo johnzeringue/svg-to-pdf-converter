@@ -1,7 +1,6 @@
 package com.johnzeringue.svgtopdf.handlers;
 
 import com.johnzeringue.svgtopdf.DocumentAttributes;
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
@@ -14,8 +13,6 @@ public class SVGElementHandler extends ElementHandler {
 
     // The view box formatting string (<min-x> <min-y> width height)
     private final static String VIEW_BOX_FORMAT = "0 0 %s %s";
-    // The child GElementHandler
-    private GElementHandler gElementHandler;
     private double pageWidth;
     private double pageHeight;
 
@@ -24,7 +21,6 @@ public class SVGElementHandler extends ElementHandler {
      * work.
      */
     public SVGElementHandler(double pageWidth, double pageHeight) {
-        gElementHandler = new GElementHandler();
         this.pageWidth = pageWidth;
         this.pageHeight = pageHeight;
     }
@@ -32,23 +28,14 @@ public class SVGElementHandler extends ElementHandler {
     /**
      * Uses the GElementHandler implementation to parse and process the style
      * property, but then checks for and ensures that the file has a view box.
-     *
-     * @param namespaceURI
-     * @param localName
-     * @param qName
-     * @param atts
-     * @throws SAXException
      */
     @Override
-    public void startElement(String namespaceURI, String localName,
-            String qName, Attributes atts) throws SAXException {
-        // Take care of style
-        gElementHandler.startElement(qName, localName, qName, atts);
+    public void startElement() {
 
         // See what the SVG tag has as far as page size
-        String viewBox = atts.getValue("viewBox");
-        String width = atts.getValue("width");
-        String height = atts.getValue("height");
+        String viewBox = docAtts.getValue("viewBox");
+        String width = docAtts.getValue("width");
+        String height = docAtts.getValue("height");
 
         // Check for a view box
         if (viewBox == null) {
@@ -75,19 +62,5 @@ public class SVGElementHandler extends ElementHandler {
         DocumentAttributes.getInstance().putValue("viewBox", viewBox);
         DocumentAttributes.getInstance().putValue("width", width);
         DocumentAttributes.getInstance().putValue("height", height);
-    }
-
-    /**
-     * Uses the GElementHandler implementation for now.
-     *
-     * @param namespaceURI
-     * @param localName
-     * @param qName
-     * @throws SAXException
-     */
-    @Override
-    public void endElement(String namespaceURI, String localName, String qName)
-            throws SAXException {
-        gElementHandler.endElement(qName, localName, qName);
     }
 }

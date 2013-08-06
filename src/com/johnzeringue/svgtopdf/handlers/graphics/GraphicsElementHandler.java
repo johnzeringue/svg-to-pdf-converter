@@ -2,7 +2,6 @@ package com.johnzeringue.svgtopdf.handlers.graphics;
 
 import com.johnzeringue.svgtopdf.ClipPaths;
 import com.johnzeringue.svgtopdf.handlers.ElementHandler;
-import com.johnzeringue.svgtopdf.handlers.GElementHandler;
 import com.johnzeringue.svgtopdf.GraphicsStates;
 import com.johnzeringue.svgtopdf.objects.DictionaryObject;
 import com.johnzeringue.svgtopdf.objects.DirectObject;
@@ -11,8 +10,6 @@ import com.johnzeringue.svgtopdf.objects.RealObject;
 import com.johnzeringue.svgtopdf.objects.StreamObject;
 import com.johnzeringue.svgtopdf.util.Text;
 import java.awt.Color;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 /**
  * An abstract class to be extended by ElementHandlers which generate visual
@@ -24,31 +21,21 @@ import org.xml.sax.SAXException;
 public abstract class GraphicsElementHandler extends ElementHandler {
 
     protected StreamObject _object = new StreamObject();
-    private GElementHandler _gElementHandler;
     private boolean _hasFill;
     private boolean _hasStroke;
     private boolean _hasDirectObject;
 
     public GraphicsElementHandler() {
         _object = new StreamObject();
-        _gElementHandler = new GElementHandler();
         _hasDirectObject = true;
     }
 
     /**
      * The parser calls this for each element in a document.
-     *
-     * @param namespaceURI
-     * @param localName
-     * @param qName
-     * @param atts
-     * @throws SAXException
      */
     @Override
-    public final void startElement(String namespaceURI, String localName,
-            String qName, Attributes atts) throws SAXException {
-        _gElementHandler.startElement(namespaceURI, localName, qName, atts);
-        
+    public final void startElement() {
+
         _hasFill = docAtts.getFill() != null;
         _hasStroke = docAtts.getStroke() != null;
 
@@ -81,20 +68,6 @@ public abstract class GraphicsElementHandler extends ElementHandler {
                     .removeLineAt(0)
                     .removeLineAt(_object.getText().lineCount() - 3));
         }
-    }
-
-    /**
-     * Removes the bottommost scope from DocumentAttributes.
-     *
-     * @param namespaceURI
-     * @param localName
-     * @param qName
-     * @throws SAXException
-     */
-    @Override
-    public void endElement(String namespaceURI, String localName, String qName)
-            throws SAXException {
-        _gElementHandler.endElement(namespaceURI, localName, qName);
     }
 
     public abstract void drawPath();
