@@ -80,6 +80,7 @@ public class SVGToPDFHandler extends DefaultHandler {
         Fonts.getNewInstance();
         GraphicsStates.getNewInstance();
         DocumentAttributes.getNewInstance();
+        ClipPaths.getNewInstance();
 
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;

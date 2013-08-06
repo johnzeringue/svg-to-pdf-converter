@@ -1,5 +1,6 @@
 package com.johnzeringue.svgtopdf.handlers;
 
+import com.johnzeringue.svgtopdf.ClipPaths;
 import java.util.jar.Attributes;
 import org.xml.sax.SAXException;
 
@@ -9,6 +10,13 @@ import org.xml.sax.SAXException;
  * @author John Zeringue
  */
 public class ClipPathElementHandler extends ElementHandler {
+    private GElementHandler _gElementHandler;
+    
+    public ClipPathElementHandler() {
+        super();
+        
+        _gElementHandler = new GElementHandler();
+    }
 
     /**
      * Parser calls this for each element in the document. This will process
@@ -24,10 +32,14 @@ public class ClipPathElementHandler extends ElementHandler {
     @Override
     public void startElement(String namespaceURI, String localName,
             String qName, org.xml.sax.Attributes atts) throws SAXException {
+        _gElementHandler.startElement(namespaceURI, localName, qName, atts);
+        
         Attributes fillStrokeToNone = new Attributes();
         fillStrokeToNone.putValue("fill", "none");
         fillStrokeToNone.putValue("stroke", "none");
         docAtts.addScope(fillStrokeToNone);
+        
+        ClipPaths.getInstance().startClipPath(docAtts.getValue("id"));
     }
 
     /**
@@ -41,6 +53,9 @@ public class ClipPathElementHandler extends ElementHandler {
     @Override
     public void endElement(String namespaceURI, String localName, String qName)
             throws SAXException {
+        ClipPaths.getInstance().endCurrentClipPath();
         docAtts.removeScope();
+        
+        _gElementHandler.endElement(namespaceURI, localName, qName);
     }
 }
