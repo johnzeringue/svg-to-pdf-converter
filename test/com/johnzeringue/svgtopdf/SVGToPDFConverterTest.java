@@ -4,7 +4,6 @@
  */
 package com.johnzeringue.svgtopdf;
 
-import com.johnzeringue.svgtopdf.util.Timer;
 import java.io.File;
 import java.io.FileFilter;
 import org.junit.Test;
