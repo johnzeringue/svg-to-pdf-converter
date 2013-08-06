@@ -1,7 +1,7 @@
 package com.johnzeringue.svgtopdf.objects;
 
 import java.util.Objects;
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 
 /**
  * A class representing an indirect object. It takes a direct object in its
@@ -48,7 +48,7 @@ public class IndirectObject {
     public String toString() {
         return String.format(INDIRECT_OBJECT_FORMAT,
                              _indirectObjectNumber,
-                             _object.getTextLines());
+                             _object.getText());
     }
 
     @Override

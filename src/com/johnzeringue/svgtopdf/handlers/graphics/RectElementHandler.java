@@ -15,7 +15,7 @@ public class RectElementHandler extends GraphicsElementHandler {
         width = Double.parseDouble(docAtts.getValue("width"));
         height = Double.parseDouble(docAtts.getValue("height"));
         y = docAtts.getHeight() - y - height;
-        _object.appendLine(String.format("%.0f %.0f %.0f %.0f re",
+        _object.append(String.format("%.0f %.0f %.0f %.0f re",
                 x, y, width, height));
     }
 }

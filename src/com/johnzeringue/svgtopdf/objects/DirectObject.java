@@ -1,6 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 
 /**
  * A common interface for direct objects.
@@ -13,5 +13,5 @@ public interface DirectObject {
      * 
      * @return this objects text
      */
-    public TextLines getTextLines();
+    public Text getText();
 }

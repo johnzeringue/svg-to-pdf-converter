@@ -10,78 +10,52 @@ import java.util.Objects;
  *
  * @author John Zeringue
  */
-public class TextLines implements Iterable<TextLine> {
+public final class Text implements Iterable<StringBuilder> {
 
-    private List<TextLine> _lines;
+    private List<StringBuilder> _lines;
 
-    public TextLines() {
+    public Text() {
         _lines = new ArrayList<>();
     }
-
-    /**
-     * Appends the given line of text
-     *
-     * @param aLine a line of text to append to this set
-     * @return a reference to this object
-     */
-    public TextLines appendLine(TextLine aLine) {
-        _lines.add(aLine);
-
+    
+    public Text(CharSequence text) {
+        this();
+        
+        for (CharSequence aLine : text.toString().split("\\n")) {
+            _lines.add(new StringBuilder(aLine));
+        }
+    }
+    
+    public Text(CharSequence[] lines) {
+        this();
+        
+        for (CharSequence aLine : lines) {
+            append(aLine);
+        }
+    }
+    
+    public Text append(Text text) {
+        for (StringBuilder aLine : text) {
+            _lines.add(aLine);
+        }
+        
         return this;
     }
-
-    /**
-     * Appends the given line of text
-     *
-     * @param aLine a line of text to append to this set
-     * @return a reference to this object
-     */
-    public TextLines appendLine(String aLine) {
-        return this.appendLine(new TextLine(aLine));
+    
+    public Text append(CharSequence text) {
+        return append(new Text(text));
     }
-
-    /**
-     * Inserts the given line of text at the specified index.
-     *
-     * @param index the index at which to insert
-     * @param aLine the line of text to insert
-     * @return a reference to this object
-     */
-    public TextLines insertLineAt(int index, TextLine aLine) {
-        _lines.add(index, aLine);
-
+    
+    public Text insertAtLine(int lineIndex, Text text) {
+        for (StringBuilder aLine : text) {
+            _lines.add(lineIndex++, aLine);
+        }
+        
         return this;
     }
-
-    /**
-     * Inserts the given line of text at the specified index.
-     *
-     * @param index the index at which to insert
-     * @param aLine the line of text to insert
-     * @return a reference to this object
-     */
-    public TextLines insertLineAt(int index, String aLine) {
-        return this.insertLineAt(index, new TextLine(aLine));
-    }
-
-    /**
-     * Prepends the given line of text to this set.
-     *
-     * @param aLine a line of text to prepend
-     * @return a reference to this object
-     */
-    public TextLines prependLine(TextLine aLine) {
-        return this.insertLineAt(0, aLine);
-    }
-
-    /**
-     * Prepends the given line of text to this set.
-     *
-     * @param aLine a line of text to prepend
-     * @return a reference to this object
-     */
-    public TextLines prependLine(String aLine) {
-        return this.insertLineAt(0, new TextLine(aLine));
+    
+    public Text insertAtLine(int lineIndex, CharSequence text) {
+        return insertAtLine(lineIndex, new Text(text));
     }
 
     /**
@@ -90,11 +64,11 @@ public class TextLines implements Iterable<TextLine> {
      * @param index the index of the desired line of text
      * @return the requested line of text
      */
-    public TextLine getLineAt(int index) {
+    public StringBuilder getLineAt(int index) {
         return _lines.get(index);
     }
 
-    public TextLines removeLineAt(int index) {
+    public Text removeLineAt(int index) {
         _lines.remove(index);
 
         return this;
@@ -105,7 +79,7 @@ public class TextLines implements Iterable<TextLine> {
      *
      * @return the size of this set
      */
-    public int size() {
+    public int lineCount() {
         return _lines.size();
     }
 
@@ -115,11 +89,11 @@ public class TextLines implements Iterable<TextLine> {
      * @param indentionSize the size of the indention in spaces
      * @return a reference to this object
      */
-    public TextLines indentAllLinesBy(int indentionSize) {
+    public Text indentAllLinesBy(int indentionSize) {
         String indention = buildIndention(indentionSize);
 
-        for (TextLine aLine : this) {
-            aLine.prepend(indention);
+        for (StringBuilder aLine : this) {
+            aLine.insert(0, indention);
         }
 
         return this;
@@ -132,11 +106,11 @@ public class TextLines implements Iterable<TextLine> {
      * @param indentionSize the size of the indention in spaces
      * @return a reference to this object
      */
-    public TextLines indentTailLinesBy(int indentionSize) {
+    public Text indentTailLinesBy(int indentionSize) {
         String indention = buildIndention(indentionSize);
 
-        for (int i = 1; i < this.size(); i++) {
-            this.getLineAt(i).prepend(indention);
+        for (int i = 1; i < this.lineCount(); i++) {
+            this.getLineAt(i).insert(0, indention);
         }
 
         return this;
@@ -165,7 +139,7 @@ public class TextLines implements Iterable<TextLine> {
      * @return this object's iterator
      */
     @Override
-    public Iterator<TextLine> iterator() {
+    public Iterator<StringBuilder> iterator() {
         return _lines.iterator();
     }
 
@@ -196,7 +170,7 @@ public class TextLines implements Iterable<TextLine> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final TextLines other = (TextLines) obj;
+        final Text other = (Text) obj;
         if (!Objects.equals(this._lines, other._lines)) {
             return false;
         }
@@ -214,16 +188,14 @@ public class TextLines implements Iterable<TextLine> {
     public String toString() {
         StringBuilder result = new StringBuilder();
 
-        if (this.size() > 0) {
-            for (int i = 0; i < this.size() - 1; i++) {
+        if (this.lineCount() > 0) {
+            for (int i = 0; i < this.lineCount() - 1; i++) {
                 result.append(this.getLineAt(i).toString());
                 result.append("\n");
             }
-            result.append(this.getLineAt(this.size() - 1));
-
-            return result.toString();
-        } else {
-            return "";
+            result.append(this.getLineAt(this.lineCount() - 1));
         }
+        
+        return result.toString();
     }
 }

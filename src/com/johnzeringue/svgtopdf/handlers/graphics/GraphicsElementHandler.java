@@ -9,8 +9,7 @@ import com.johnzeringue.svgtopdf.objects.DirectObject;
 import com.johnzeringue.svgtopdf.objects.NameObject;
 import com.johnzeringue.svgtopdf.objects.RealObject;
 import com.johnzeringue.svgtopdf.objects.StreamObject;
-import com.johnzeringue.svgtopdf.util.TextLine;
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.awt.Color;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -77,10 +76,10 @@ public abstract class GraphicsElementHandler extends ElementHandler {
             drawPath();
 
             ClipPaths.getInstance().addClipPathContent(
-                    _object.getTextLines()
+                    _object.getText()
                     .removeLineAt(0)
                     .removeLineAt(0)
-                    .removeLineAt(_object.getTextLines().size() - 3));
+                    .removeLineAt(_object.getText().lineCount() - 3));
         }
     }
 
@@ -108,7 +107,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         Color fillColor = docAtts.getFill();
 
         if (fillColor != null) {
-            _object.appendLine(String.format(
+            _object.append(String.format(
                     "%.2f %.2f %.2f rg",
                     fillColor.getRed() / 255.0,
                     fillColor.getGreen() / 255.0,
@@ -120,7 +119,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         Color strokeColor = docAtts.getStroke();
 
         if (strokeColor != null) {
-            _object.appendLine(String.format(
+            _object.append(String.format(
                     "%.2f %.2f %.2f RG",
                     strokeColor.getRed() / 255.0,
                     strokeColor.getGreen() / 255.0,
@@ -132,28 +131,28 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         String strokeWidth = docAtts.getValue("stroke-width");
 
         if (strokeWidth != null) {
-            _object.appendLine(String.format("%s w", strokeWidth));
+            _object.append(String.format("%s w", strokeWidth));
         }
     }
 
     private void closePath() {
         if (_hasFill && _hasStroke) {
-            _object.appendLine("b");
+            _object.append("b");
         } else if (_hasFill) {
-            _object.appendLine("f n");
+            _object.append("f n");
         } else if (_hasStroke) {
-            _object.appendLine("h s");
+            _object.append("h s");
         } else {
-            _object.appendLine("n");
+            _object.append("n");
         }
     }
 
     private void saveGraphicsState() {
-        _object.appendLine("q");
+        _object.append("q");
     }
 
     private void restoreGraphicsState() {
-        _object.appendLine("Q");
+        _object.append("Q");
     }
 
     @Override
@@ -171,7 +170,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
             DictionaryObject graphicsState = new DictionaryObject()
                     .addEntry("Type", new NameObject("ExtGState"))
                     .addEntry("ca", new RealObject(docAtts.getValue("opacity")));
-            _object.appendLine(GraphicsStates.getInstance().getGraphicStateName(graphicsState) + " gs");
+            _object.append(GraphicsStates.getInstance().getGraphicStateName(graphicsState) + " gs");
         }
     }
 
@@ -179,12 +178,10 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         String clipPathID = docAtts.getValue("clip-path");
 
         if (clipPathID != null) {
-            TextLines clipPath = ClipPaths.getInstance().getClipPath(
+            Text clipPath = ClipPaths.getInstance().getClipPath(
                     clipPathID.substring(5, clipPathID.length() - 1));
 
-            for (TextLine aLine : clipPath) {
-                _object.appendLine(aLine);
-            }
+            _object.append(clipPath);
         }
     }
 }

@@ -57,22 +57,22 @@ public class TextElementHandler extends ElementHandler {
             String qName, Attributes atts) throws SAXException {
         _gElementHandler.startElement(namespaceURI, localName, qName, atts);
 
-        _object.appendLine("q");
+        _object.append("q");
 
-        _object.appendLine("BT");
+        _object.append("BT");
 
         parseTransform();
 
         String fontFamily = docAtts.getValue("font-family").replaceAll("'", "");
         Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
 
-        _object.appendLine("0.0 g");
-        _object.appendLine(String.format("%s %.1f Tf",
+        _object.append("0.0 g");
+        _object.append(String.format("%s %.1f Tf",
                 Fonts.getInstance().getFontTag(fontFamily), fontSize));
 
         double height = docAtts.getHeight();
 
-        _object.appendLine(String.format("%f %f Td",
+        _object.append(String.format("%f %f Td",
                 Double.parseDouble(atts.getValue("x")),
                 height - Double.parseDouble(atts.getValue("y"))));
     }
@@ -96,33 +96,33 @@ public class TextElementHandler extends ElementHandler {
         int start = 0;
         for (int i = 0; i < _tagContents.length(); i++) {
             if (_tagContents.charAt(i) > 127) {
-                _object.appendLine(String.format("(%s) Tj", _tagContents.substring(start, i)));
+                _object.append(String.format("(%s) Tj", _tagContents.substring(start, i)));
 
-                _object.appendLine("q");
+                _object.append("q");
 
                 Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
-                _object.appendLine(String.format("%s %.1f Tf",
+                _object.append(String.format("%s %.1f Tf",
                         Fonts.getInstance().getFontTag("Symbol"), fontSize));
 
                 if ((int) _tagContents.charAt(i) == 955) { // lambda
-                    _object.appendLine(String.format("(%s) Tj", (char) 108));
+                    _object.append(String.format("(%s) Tj", (char) 108));
                 } else if ((int) _tagContents.charAt(i) == 963) { // sigma
-                    _object.appendLine(String.format("(%s) Tj", (char) 115));
+                    _object.append(String.format("(%s) Tj", (char) 115));
                 } else { // plus minus
-                    _object.appendLine("(\\261) Tj");
+                    _object.append("(\\261) Tj");
                 }
                 
                 start = i + 1;
 
-                _object.appendLine("Q");
+                _object.append("Q");
             }
         }
 
-        _object.appendLine(String.format("(%s) Tj", _tagContents.substring(start)));
+        _object.append(String.format("(%s) Tj", _tagContents.substring(start)));
 
-        _object.appendLine("ET");
+        _object.append("ET");
 
-        _object.appendLine("Q");
+        _object.append("Q");
 
         _gElementHandler.endElement(namespaceURI, localName, qName);
     }
@@ -148,15 +148,15 @@ public class TextElementHandler extends ElementHandler {
         if (m.lookingAt()) {
             double rotateAngle = -1 * Double.parseDouble(m.group(1)) * Math.PI / 180;
 
-            _object.appendLine(
+            _object.append(
                     String.format("%f %f %f %f %f %f cm",
                     1.0, 0.0, 0.0, 1.0, 0.0, docAtts.getHeight()));
-            _object.appendLine(
+            _object.append(
                     String.format("%f %f %f %f %f %f cm",
                     Math.cos(rotateAngle), Math.sin(rotateAngle),
                     -1 * Math.sin(rotateAngle), Math.cos(rotateAngle),
                     0.0, 0.0));
-            _object.appendLine(
+            _object.append(
                     String.format("%f %f %f %f %f %f cm",
                     1.0, 0.0, 0.0, 1.0, 0.0, -1 * docAtts.getHeight()));
 
@@ -173,7 +173,7 @@ public class TextElementHandler extends ElementHandler {
             double tx = Double.parseDouble(m.group(1));
             double ty = -1 * Double.parseDouble(m.group(2));
 
-            _object.appendLine(
+            _object.append(
                     String.format("%f %f %f %f %f %f cm",
                     1.0, 0.0, 0.0, 1.0, tx, ty));
 

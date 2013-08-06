@@ -1,7 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
-import com.johnzeringue.svgtopdf.util.TextLine;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,12 +14,12 @@ public class ArrayObject implements DirectObject {
 
     private List<DirectObject> _contents;
     private boolean _hasChanged;
-    private TextLines _text;
+    private Text _text;
 
     public ArrayObject() {
         _contents = new ArrayList<>();
         _hasChanged = false;
-        _text = new TextLines().appendLine("[ ]");
+        _text = new Text().append("[ ]");
     }
 
     public ArrayObject add(DirectObject anObject) {
@@ -31,19 +30,17 @@ public class ArrayObject implements DirectObject {
     }
 
     @Override
-    public TextLines getTextLines() {
+    public Text getText() {
         if (_hasChanged) {
-            _text = new TextLines();
+            _text = new Text();
 
             for (DirectObject anObject : _contents) {
-                for (TextLine aLine : anObject.getTextLines()) {
-                    _text.appendLine(aLine);
-                }
+                _text.append(anObject.getText());
             }
 
             _text.indentTailLinesBy(2);
-            _text.getLineAt(0).prepend("[ ");
-            _text.getLineAt(_text.size() - 1).append(" ]");
+            _text.getLineAt(0).insert(0, "[ ");
+            _text.getLineAt(_text.lineCount() - 1).append(" ]");
 
             _hasChanged = false;
         }

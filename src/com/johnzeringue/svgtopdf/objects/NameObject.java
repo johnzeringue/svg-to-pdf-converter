@@ -4,7 +4,7 @@
  */
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.util.Objects;
 
 /**
@@ -19,8 +19,8 @@ public class NameObject implements DirectObject {
     }
 
     @Override
-    public TextLines getTextLines() {
-        return new TextLines().appendLine("/" + _value);
+    public Text getText() {
+        return new Text("/" + _value);
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class PDFWriter {
                 .addEntry("Size", new IntegerObject(_objectIndices.size() + 1))
                 .addEntry("Root", root);
         writeln(trailerDictionary
-                .getTextLines().indentAllLinesBy(2).toString());
+                .getText().indentAllLinesBy(2).toString());
         
         writeln("startxref");
         writeln(String.valueOf(_xrefIndex));

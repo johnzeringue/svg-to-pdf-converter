@@ -1,7 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
-import com.johnzeringue.svgtopdf.util.TextLine;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.util.Objects;
 
 /**
@@ -12,43 +11,36 @@ import java.util.Objects;
 public class StreamObject implements DirectObject {
     
     private DictionaryObject _dictionary;
-    private TextLines _contents;
+    private Text _contents;
     
     public StreamObject() {
         _dictionary = new DictionaryObject();
-        _contents = new TextLines();
+        _contents = new Text();
     }
     
-    public StreamObject appendLine(String aLine) {
-        _contents.appendLine(new TextLine(aLine));
+    public StreamObject append(String text) {
+        _contents.append(text);
         
         return this;
     }
     
-    public StreamObject appendLine(TextLine aLine) {
-        _contents.appendLine(aLine);
+    public StreamObject append(Text text) {
+        _contents.append(text);
         
         return this;
     }
 
     @Override
-    public TextLines getTextLines() {
-        TextLines result = new TextLines();
+    public Text getText() {
+        Text result = new Text();
         
         _dictionary.addEntry(new NameObject("Length"),
                 new IntegerObject(_contents.toString().length()));
         
-        for (TextLine aLine : _dictionary.getTextLines()) {
-            result.appendLine(aLine);
-        }
-        
-        result.appendLine("stream");
-        
-        for (TextLine aLine : _contents) {
-            result.appendLine(aLine);
-        }
-        
-        result.appendLine("endstream");
+        result.append(_dictionary.getText());
+        result.append("stream");
+        result.append(_contents);
+        result.append("endstream");
         
         return result;
     }

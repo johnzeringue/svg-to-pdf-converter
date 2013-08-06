@@ -1,6 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,12 +14,12 @@ public class DictionaryObject implements DirectObject {
 
     private boolean _hasChanged;
     private Map<NameObject, DirectObject> _map;
-    private TextLines _textValue;
+    private Text _textValue;
 
     public DictionaryObject() {
         _map = new HashMap<>();
         _hasChanged = false;
-        _textValue = new TextLines().appendLine("<< >>");
+        _textValue = new Text().append("<< >>");
     }
 
     public DictionaryObject addEntry(String key, DirectObject value) {
@@ -50,30 +50,30 @@ public class DictionaryObject implements DirectObject {
     }
 
     @Override
-    public TextLines getTextLines() {
+    public Text getText() {
         if (_hasChanged) {
-            _textValue = new TextLines();
+            _textValue = new Text();
 
             int keyLength;
             for (Map.Entry<NameObject, DirectObject> anEntry : _map.entrySet()) {
-                keyLength = anEntry.getKey().getTextLines().getLineAt(0).length();
+                keyLength = anEntry.getKey().getText().getLineAt(0).length();
 
-                _textValue.appendLine(
+                _textValue.append(
                         String.format("%s %s",
-                                      anEntry.getKey().getTextLines(),
-                                      anEntry.getValue().getTextLines().getLineAt(0)));
+                                      anEntry.getKey().getText(),
+                                      anEntry.getValue().getText().getLineAt(0)));
                 
-                anEntry.getValue().getTextLines().indentTailLinesBy(keyLength + 1);
+                anEntry.getValue().getText().indentTailLinesBy(keyLength + 1);
 
-                for (int i = 1; i < anEntry.getValue().getTextLines().size(); i++) {
-                    _textValue.appendLine(
-                            anEntry.getValue().getTextLines().getLineAt(i));
+                for (int i = 1; i < anEntry.getValue().getText().lineCount(); i++) {
+                    _textValue.append(
+                            anEntry.getValue().getText().getLineAt(i));
                 }
             }
 
             _textValue.indentTailLinesBy(3);
-            _textValue.getLineAt(0).prepend("<< ");
-            _textValue.getLineAt(_textValue.size() - 1).append(" >>");
+            _textValue.getLineAt(0).insert(0, "<< ");
+            _textValue.getLineAt(_textValue.lineCount() - 1).append(" >>");
 
             _hasChanged = false;
         }

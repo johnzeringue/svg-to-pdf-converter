@@ -1,7 +1,6 @@
 package com.johnzeringue.svgtopdf;
 
-import com.johnzeringue.svgtopdf.util.TextLine;
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +13,7 @@ import java.util.Map.Entry;
 public class ClipPaths {
 
     private static ClipPaths instance;
-    private Map<String, TextLines> _clipPaths;
+    private Map<String, Text> _clipPaths;
     private String _currentClipPath;
     private boolean _isBuilding;
 
@@ -24,29 +23,27 @@ public class ClipPaths {
     }
 
     public void startClipPath(String clipPathID) {
-        _clipPaths.put(clipPathID, new TextLines());
+        _clipPaths.put(clipPathID, new Text());
         _currentClipPath = clipPathID;
         _isBuilding = true;
     }
 
-    public void addClipPathContent(TextLines content) {
-        for (TextLine aLine : content) {
-            _clipPaths.get(_currentClipPath).appendLine(aLine);
-        }
+    public void addClipPathContent(Text content) {
+        _clipPaths.get(_currentClipPath).append(content);
     }
     
     public void endCurrentClipPath() {
-        _clipPaths.get(_currentClipPath).appendLine("W n");
+        _clipPaths.get(_currentClipPath).append("W n");
         _currentClipPath = null;
         _isBuilding = false;
     }
     
-    public TextLines getClipPath(String clipPathID) {
+    public Text getClipPath(String clipPathID) {
         return _clipPaths.get(clipPathID);
     }
     
     public void printClipPaths() {
-        for (Entry<String, TextLines> anEntry : _clipPaths.entrySet()) {
+        for (Entry<String, Text> anEntry : _clipPaths.entrySet()) {
             System.out.println(anEntry.getKey());
             System.out.println(anEntry.getValue());
         }

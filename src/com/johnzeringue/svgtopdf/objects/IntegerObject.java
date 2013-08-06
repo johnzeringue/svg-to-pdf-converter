@@ -1,6 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 
 /**
  * 
@@ -19,8 +19,8 @@ public class IntegerObject implements DirectObject {
     }
     
     @Override
-    public TextLines getTextLines() {
-        return new TextLines().appendLine(String.valueOf(_value));
+    public Text getText() {
+        return new Text(String.valueOf(_value));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
-import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.Text;
 
 /**
  *
@@ -16,9 +16,9 @@ public class ObjectReference implements DirectObject {
     }
 
     @Override
-    public TextLines getTextLines() {
+    public Text getText() {
         
-        return new TextLines().appendLine(
+        return new Text(
                 String.format(OBJECT_REFERENCE_FORMAT, _indirectObjectNumber));
     }
 
