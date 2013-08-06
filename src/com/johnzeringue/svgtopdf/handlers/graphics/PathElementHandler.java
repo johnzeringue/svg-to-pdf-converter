@@ -150,7 +150,7 @@ public class PathElementHandler extends GraphicsElementHandler {
         Pattern p = Pattern.compile(LINE_TO_REGEX);
         Matcher m = p.matcher(path);
         if (m.lookingAt()) {
-            x = _currentPoint.getX();
+            x = Double.parseDouble(m.group(1));
             y = invertY(Double.parseDouble(m.group(2)));
 
             _object.append(

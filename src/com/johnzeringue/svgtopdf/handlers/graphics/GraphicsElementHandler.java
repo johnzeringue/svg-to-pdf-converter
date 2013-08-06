@@ -42,7 +42,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         if (_hasFill || _hasStroke) {
             saveGraphicsState();
 
-            //setClipPath();
+            setClipPath();
 
             drawPath();
 
