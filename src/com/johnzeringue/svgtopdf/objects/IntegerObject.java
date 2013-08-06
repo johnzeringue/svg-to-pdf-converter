@@ -1,5 +1,7 @@
 package com.johnzeringue.svgtopdf.objects;
 
+import com.johnzeringue.svgtopdf.util.TextLines;
+
 /**
  * 
  *

@@ -1,4 +1,4 @@
-package com.johnzeringue.svgtopdf;
+package com.johnzeringue.svgtopdf.util;
 
 /**
  * A simple timer representation that can start a timer at 0 milliseconds and

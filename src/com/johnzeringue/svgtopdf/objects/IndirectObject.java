@@ -1,6 +1,7 @@
 package com.johnzeringue.svgtopdf.objects;
 
 import java.util.Objects;
+import com.johnzeringue.svgtopdf.util.TextLines;
 
 /**
  * A class representing an indirect object. It takes a direct object in its

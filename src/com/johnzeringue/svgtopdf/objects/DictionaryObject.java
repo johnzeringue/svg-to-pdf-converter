@@ -1,5 +1,6 @@
 package com.johnzeringue.svgtopdf.objects;
 
+import com.johnzeringue.svgtopdf.util.TextLines;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;

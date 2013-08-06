@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import com.johnzeringue.svgtopdf.util.TextLines;
 
 /**
  * 

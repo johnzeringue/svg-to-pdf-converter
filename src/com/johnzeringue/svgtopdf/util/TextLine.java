@@ -1,4 +1,4 @@
-package com.johnzeringue.svgtopdf.objects;
+package com.johnzeringue.svgtopdf.util;
 
 import java.util.Objects;
 

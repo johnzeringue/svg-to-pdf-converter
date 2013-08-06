@@ -4,8 +4,8 @@
  */
 package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
-import com.johnzeringue.svgtopdf.objects.TextLines;
-import com.johnzeringue.svgtopdf.objects.TextLine;
+import com.johnzeringue.svgtopdf.util.TextLines;
+import com.johnzeringue.svgtopdf.util.TextLine;
 import java.util.Iterator;
 import static org.junit.Assert.*;
 import org.junit.Test;

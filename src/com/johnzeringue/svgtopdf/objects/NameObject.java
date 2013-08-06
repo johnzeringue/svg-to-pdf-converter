@@ -4,6 +4,7 @@
  */
 package com.johnzeringue.svgtopdf.objects;
 
+import com.johnzeringue.svgtopdf.util.TextLines;
 import java.util.Objects;
 
 /**

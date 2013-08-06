@@ -4,7 +4,7 @@
  */
 package com.johnzeringue.SVGToPDFConverter.PDFObjects;
 
-import com.johnzeringue.svgtopdf.objects.TextLine;
+import com.johnzeringue.svgtopdf.util.TextLine;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
