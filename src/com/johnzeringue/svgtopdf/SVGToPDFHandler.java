@@ -3,7 +3,6 @@ package com.johnzeringue.svgtopdf;
 import com.johnzeringue.svgtopdf.handlers.TextElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ClipPathElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ElementHandler;
-import com.johnzeringue.svgtopdf.handlers.SVGElementHandler;
 import com.johnzeringue.svgtopdf.objects.RealObject;
 import com.johnzeringue.svgtopdf.handlers.graphics.CircleElementHandler;
 import com.johnzeringue.svgtopdf.handlers.graphics.LineElementHandler;
@@ -83,8 +82,8 @@ public class SVGToPDFHandler extends DefaultHandler {
 
         elementHandlers = new Stack<>();
         pdfObjectCount = 0;
-        DocumentAttributes.getInstance().putValue("width", width + "px");
-        DocumentAttributes.getInstance().putValue("height", height + "px");
+        DocumentAttributes.getInstance().putValue("pageWidth", String.valueOf(width));
+        DocumentAttributes.getInstance().putValue("pageHeight", String.valueOf(height));
         _writer = new PDFWriter(file);
     }
 
@@ -133,11 +132,7 @@ public class SVGToPDFHandler extends DefaultHandler {
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
         // Push the appropriate ElementHandler to the stack
-        if (qName.equalsIgnoreCase("SVG")) {
-            elementHandlers.push(new SVGElementHandler(
-                    DocumentAttributes.getInstance().getWidth(),
-                    DocumentAttributes.getInstance().getHeight()));
-        } else if (qName.equalsIgnoreCase("Text")) {
+        if (qName.equalsIgnoreCase("Text")) {
             elementHandlers.push(new TextElementHandler());
         } else if (qName.equalsIgnoreCase("Rect")) {
             elementHandlers.push(new RectElementHandler());
@@ -228,8 +223,8 @@ public class SVGToPDFHandler extends DefaultHandler {
                 .addEntry("MediaBox", new ArrayObject()
                 .add(new IntegerObject(0))
                 .add(new IntegerObject(0))
-                .add(new RealObject(DocumentAttributes.getInstance().getWidth()))
-                .add(new RealObject(DocumentAttributes.getInstance().getHeight())))
+                .add(new RealObject(DocumentAttributes.getInstance().getValueAsDouble("pageWidth")))
+                .add(new RealObject(DocumentAttributes.getInstance().getValueAsDouble("pageHeight"))))
                 .addEntry("Resources", writeResourceObject());
         pageObject = new IndirectObject(++pdfObjectCount, pageDictionary);
         pageReference = pageObject.getObjectReference();

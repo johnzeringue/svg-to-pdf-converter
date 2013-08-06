@@ -8,13 +8,13 @@ package com.johnzeringue.svgtopdf.handlers.graphics;
 public class RectElementHandler extends GraphicsElementHandler {
 
     @Override
-    public void drawPath() {// Create the rectangle path
+    public void drawPath() { // Create the rectangle path
         double x, y, width, height;
-        x = Double.parseDouble(docAtts.getValue("x"));
-        y = Double.parseDouble(docAtts.getValue("y"));
-        width = Double.parseDouble(docAtts.getValue("width"));
-        height = Double.parseDouble(docAtts.getValue("height"));
-        y = docAtts.getHeight() - y - height;
+        x = getValueAsDouble("x");
+        y = getValueAsDouble("y");
+        width = getValueAsDouble("width");
+        height = getValueAsDouble("height");
+        y = invertY(y) - height;
         _object.append(String.format("%.0f %.0f %.0f %.0f re",
                 x, y, width, height));
     }

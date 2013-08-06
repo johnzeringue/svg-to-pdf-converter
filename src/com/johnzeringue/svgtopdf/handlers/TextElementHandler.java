@@ -59,18 +59,17 @@ public class TextElementHandler extends ElementHandler {
 
         parseTransform();
 
-        String fontFamily = docAtts.getValue("font-family").replaceAll("'", "");
-        Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
+        String fontFamily = getValue("font-family").replaceAll("'", "");
+        Double fontSize = getValueAsDouble("font-size");
 
         _object.append("0.0 g");
         _object.append(String.format("%s %.1f Tf",
                 Fonts.getInstance().getFontTag(fontFamily), fontSize));
 
-        double height = docAtts.getHeight();
+        double height = getValueAsDouble("pageHeight");
 
         _object.append(String.format("%f %f Td",
-                Double.parseDouble(docAtts.getValue("x")),
-                height - Double.parseDouble(docAtts.getValue("y"))));
+                getValueAsDouble("x"), height - getValueAsDouble("y")));
     }
 
     @Override
@@ -95,7 +94,7 @@ public class TextElementHandler extends ElementHandler {
 
                 _object.append("q");
 
-                Double fontSize = Double.valueOf(docAtts.getValue("font-size"));
+                Double fontSize = getValueAsDouble("font-size");
                 _object.append(String.format("%s %.1f Tf",
                         Fonts.getInstance().getFontTag("Symbol"), fontSize));
 
@@ -119,7 +118,7 @@ public class TextElementHandler extends ElementHandler {
     }
 
     private void parseTransform() {
-        String transform = docAtts.getValue("transform");
+        String transform = getValue("transform");
 
         while (transform != null && !transform.equals("")) {
             switch (transform.charAt(0)) {
@@ -141,7 +140,7 @@ public class TextElementHandler extends ElementHandler {
 
             _object.append(
                     String.format("%f %f %f %f %f %f cm",
-                    1.0, 0.0, 0.0, 1.0, 0.0, docAtts.getHeight()));
+                    1.0, 0.0, 0.0, 1.0, 0.0, getValueAsDouble("pageHeight")));
             _object.append(
                     String.format("%f %f %f %f %f %f cm",
                     Math.cos(rotateAngle), Math.sin(rotateAngle),
@@ -149,7 +148,7 @@ public class TextElementHandler extends ElementHandler {
                     0.0, 0.0));
             _object.append(
                     String.format("%f %f %f %f %f %f cm",
-                    1.0, 0.0, 0.0, 1.0, 0.0, -1 * docAtts.getHeight()));
+                    1.0, 0.0, 0.0, 1.0, 0.0, -1 * getValueAsDouble("pageHeight")));
 
             return s.substring(m.end());
         } else {

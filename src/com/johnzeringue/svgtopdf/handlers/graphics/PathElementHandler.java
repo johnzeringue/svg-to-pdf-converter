@@ -25,7 +25,7 @@ public class PathElementHandler extends GraphicsElementHandler {
 
     @Override
     public void drawPath() {
-        String path = docAtts.getValue("d");
+        String path = getValue("d");
         currentPoint = new Point2D.Double();
 
         while (path != null && !"".equals(path)) {

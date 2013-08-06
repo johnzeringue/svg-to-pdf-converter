@@ -36,8 +36,8 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     @Override
     public final void startElement() {
 
-        _hasFill = docAtts.getFill() != null;
-        _hasStroke = docAtts.getStroke() != null;
+        _hasFill = getValueAsColor("fill") != null;
+        _hasStroke = getValueAsColor("stroke") != null;
 
         if (_hasFill || _hasStroke) {
             saveGraphicsState();
@@ -73,11 +73,11 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     public abstract void drawPath();
 
     protected double invertY(double y) {
-        return docAtts.getHeight() - y;
+        return getValueAsDouble("pageHeight") - y;
     }
 
     private void setFill() {
-        Color fillColor = docAtts.getFill();
+        Color fillColor = getValueAsColor("fill");
 
         if (fillColor != null) {
             _object.append(String.format(
@@ -89,7 +89,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     }
 
     private void setStroke() {
-        Color strokeColor = docAtts.getStroke();
+        Color strokeColor = getValueAsColor("stroke");
 
         if (strokeColor != null) {
             _object.append(String.format(
@@ -101,7 +101,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     }
 
     private void setStrokeWidth() {
-        String strokeWidth = docAtts.getValue("stroke-width");
+        String strokeWidth = getValue("stroke-width");
 
         if (strokeWidth != null) {
             _object.append(String.format("%s w", strokeWidth));
@@ -139,16 +139,16 @@ public abstract class GraphicsElementHandler extends ElementHandler {
     }
 
     private void setOpacity() {
-        if (docAtts.getValue("opacity") != null) {
+        if (getValue("opacity") != null) {
             DictionaryObject graphicsState = new DictionaryObject()
                     .addEntry("Type", new NameObject("ExtGState"))
-                    .addEntry("ca", new RealObject(docAtts.getValue("opacity")));
+                    .addEntry("ca", new RealObject(getValue("opacity")));
             _object.append(GraphicsStates.getInstance().getGraphicStateName(graphicsState) + " gs");
         }
     }
 
     private void setClipPath() {
-        String clipPathID = docAtts.getValue("clip-path");
+        String clipPathID = getValue("clip-path");
 
         if (clipPathID != null) {
             Text clipPath = ClipPaths.getInstance().getClipPath(

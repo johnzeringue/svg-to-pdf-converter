@@ -1,8 +1,8 @@
 package com.johnzeringue.svgtopdf.handlers;
 
 import com.johnzeringue.svgtopdf.ClipPaths;
+import com.johnzeringue.svgtopdf.DocumentAttributes;
 import java.util.jar.Attributes;
-import org.xml.sax.SAXException;
 
 /**
  * An element handler for clipPath tags. Makes the inner path a clip path.
@@ -21,9 +21,9 @@ public class ClipPathElementHandler extends ElementHandler {
         Attributes fillStrokeToNone = new Attributes();
         fillStrokeToNone.putValue("fill", "none");
         fillStrokeToNone.putValue("stroke", "none");
-        docAtts.addScope(fillStrokeToNone);
+        DocumentAttributes.getInstance().addScope(fillStrokeToNone);
         
-        ClipPaths.getInstance().startClipPath(docAtts.getValue("id"));
+        ClipPaths.getInstance().startClipPath(getValue("id"));
     }
 
     /**
@@ -32,6 +32,6 @@ public class ClipPathElementHandler extends ElementHandler {
     @Override
     public void endElement() {
         ClipPaths.getInstance().endCurrentClipPath();
-        docAtts.removeScope();
+        DocumentAttributes.getInstance().removeScope();
     }
 }

@@ -2,6 +2,7 @@ package com.johnzeringue.svgtopdf.handlers;
 
 import com.johnzeringue.svgtopdf.DocumentAttributes;
 import com.johnzeringue.svgtopdf.objects.DirectObject;
+import java.awt.Color;
 import java.util.jar.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -14,13 +15,6 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author John Zeringue
  */
 public class ElementHandler extends DefaultHandler {
-    // A local handle for DocumentAttributes
-
-    protected DocumentAttributes docAtts;
-
-    public ElementHandler() {
-        docAtts = DocumentAttributes.getInstance();
-    }
 
     /**
      * Parses the style string and adds it to the global document attributes.
@@ -64,9 +58,8 @@ public class ElementHandler extends DefaultHandler {
             }
         }
 
-        // Add the new Attributes object to DocumentAttributes
-        docAtts.addScope(currentAttributes);
-
+        DocumentAttributes.getInstance().addScope(currentAttributes);
+        
         startElement();
     }
 
@@ -87,11 +80,27 @@ public class ElementHandler extends DefaultHandler {
             throws SAXException {
         endElement();
 
-        docAtts.removeScope();
+        DocumentAttributes.getInstance().removeScope();
     }
 
     public void endElement() {
         // To be overridden
+    }
+    
+    public String getValue(String name) {
+        return DocumentAttributes.getInstance().getValue(name);
+    }
+    
+    public int getValueAsInt(String name) {
+        return DocumentAttributes.getInstance().getValueAsInt(name);
+    }
+    
+    public double getValueAsDouble(String name) {
+        return DocumentAttributes.getInstance().getValueAsDouble(name);
+    }
+    
+    public Color getValueAsColor(String name) {
+        return DocumentAttributes.getInstance().getValueAsColor(name);
     }
 
     public DirectObject getDirectObject() {

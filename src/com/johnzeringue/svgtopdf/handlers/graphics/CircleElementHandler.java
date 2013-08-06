@@ -14,9 +14,9 @@ public class CircleElementHandler extends GraphicsElementHandler {
     public void drawPath() {
         double r, cx, cy, x1, y1, x2, y2, offset;
 
-        r = Double.parseDouble(docAtts.getValue("r"));
-        cx = Double.parseDouble(docAtts.getValue("cx"));
-        cy = invertY(Double.parseDouble(docAtts.getValue("cy")));
+        r = getValueAsDouble("r");
+        cx = getValueAsDouble("cx");
+        cy = invertY(getValueAsDouble("cy"));
         offset = (4.0 / 3) * (Math.sqrt(2) - 1) * r;
 
         // Move to the tangent at 0 radians

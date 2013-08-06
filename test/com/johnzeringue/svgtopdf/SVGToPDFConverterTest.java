@@ -40,7 +40,7 @@ public class SVGToPDFConverterTest {
             // Parse the file
             svgToPDF.convert(svgInput);
             
-            System.out.printf("Generated %s in %d milliseconds.\n",
+            System.out.printf("Generated %s in %d ms.\n",
                     pdfOutput.getName(), t.check());
         }
 

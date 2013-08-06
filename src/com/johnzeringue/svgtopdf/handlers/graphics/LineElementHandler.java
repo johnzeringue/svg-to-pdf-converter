@@ -11,12 +11,11 @@ public class LineElementHandler extends GraphicsElementHandler {
     public void drawPath() {
         // Draw the line
         double x1, y1, x2, y2;
-        x1 = Double.parseDouble(docAtts.getValue("x1"));
-        y1 = Double.parseDouble(docAtts.getValue("y1"));
-        x2 = Double.parseDouble(docAtts.getValue("x2"));
-        y2 = Double.parseDouble(docAtts.getValue("y2"));
-        y1 = docAtts.getHeight() - y1;
-        y2 = docAtts.getHeight() - y2;
+        x1 = getValueAsDouble("x1");
+        y1 = invertY(getValueAsDouble("y1"));
+        x2 = getValueAsDouble("x2");
+        y2 = invertY(getValueAsDouble("y2"));
+        
         _object.append(String.format("%.0f %.0f m %.0f %.0f l",
                 x1, y1, x2, y2));
     }

@@ -60,6 +60,18 @@ public class DocumentAttributes {
         return attributes.getValue(name);
     }
     
+    public int getValueAsInt(String name) {
+        return Integer.parseInt(getValue(name));
+    }
+    
+    public double getValueAsDouble(String name) {
+        return Double.parseDouble(getValue(name));
+    }
+    
+    public Color getValueAsColor(String name) {
+        return Colors.get(getValue(name));
+    }
+    
     /**
      * Sets the unscoped attribute value referred to by name to the given value.
      * Note that this setting does not take precedent over scoped settings.
@@ -68,16 +80,6 @@ public class DocumentAttributes {
      * @param value 
      */
     public void putValue(String name, String value) {
-        // Exceptions for special cases
-        switch (name) {
-            case "height":
-                height = Double.parseDouble(value.replaceAll("px", ""));
-                break;
-            case "width":
-                width = Double.parseDouble(value.replaceAll("px", ""));
-                break;
-        }
-        
         attributes.putValue(name, value);
     }
     
@@ -95,14 +97,6 @@ public class DocumentAttributes {
      */
     public void removeScope() {
         scopes.removeLast();
-    }
-    
-    public double getHeight() {
-        return height;
-    }
-    
-    public double getWidth() {
-        return width;
     }
     
     public Color getStroke() {
