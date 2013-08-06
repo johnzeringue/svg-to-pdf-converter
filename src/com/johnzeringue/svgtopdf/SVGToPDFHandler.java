@@ -3,6 +3,7 @@ package com.johnzeringue.svgtopdf;
 import com.johnzeringue.svgtopdf.handlers.TextElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ClipPathElementHandler;
 import com.johnzeringue.svgtopdf.handlers.ElementHandler;
+import com.johnzeringue.svgtopdf.handlers.SVGElementHandler;
 import com.johnzeringue.svgtopdf.objects.RealObject;
 import com.johnzeringue.svgtopdf.handlers.graphics.CircleElementHandler;
 import com.johnzeringue.svgtopdf.handlers.graphics.LineElementHandler;
@@ -132,7 +133,9 @@ public class SVGToPDFHandler extends DefaultHandler {
     public void startElement(String namespaceURI, String localName,
             String qName, Attributes atts) throws SAXException {
         // Push the appropriate ElementHandler to the stack
-        if (qName.equalsIgnoreCase("Text")) {
+        if (qName.equalsIgnoreCase("SVG")) {
+            elementHandlers.push(new SVGElementHandler());
+        } else if (qName.equalsIgnoreCase("Text")) {
             elementHandlers.push(new TextElementHandler());
         } else if (qName.equalsIgnoreCase("Rect")) {
             elementHandlers.push(new RectElementHandler());

@@ -109,6 +109,7 @@ public class TextElementHandler extends ElementHandler {
                 start = i + 1;
 
                 _object.append("Q");
+                _tagContents.insert(i + 1, "  ");
             }
         }
 
