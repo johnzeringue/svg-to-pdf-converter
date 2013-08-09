@@ -117,7 +117,7 @@ public abstract class GraphicsElementHandler extends ElementHandler {
         } else if (_hasFill) {
             _object.append("f n");
         } else if (_hasStroke) {
-            _object.append("h s");
+            _object.append("S");
         } else {
             _object.append("n");
         }

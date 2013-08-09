@@ -3,6 +3,7 @@ package com.johnzeringue.svgtopdf.handlers;
 import com.johnzeringue.svgtopdf.Fonts;
 import com.johnzeringue.svgtopdf.objects.DirectObject;
 import com.johnzeringue.svgtopdf.objects.StreamObject;
+import java.awt.Font;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,10 +62,13 @@ public class TextElementHandler extends ElementHandler {
 
         String fontFamily = getValue("font-family").replaceAll("'", "");
         Double fontSize = getValueAsDouble("font-size");
-
+        Font font = new Font(fontFamily,
+                getValue("font-weight").equals("bold") ? Font.BOLD : Font.PLAIN,
+                (int) Math.round(fontSize));
+        
         _object.append("0.0 g");
         _object.append(String.format("%s %.1f Tf",
-                Fonts.getInstance().getFontTag(fontFamily), fontSize));
+                Fonts.getInstance().getFontTag(font), fontSize));
 
         double height = getValueAsDouble("pageHeight");
 
@@ -92,24 +96,28 @@ public class TextElementHandler extends ElementHandler {
             if (_tagContents.charAt(i) > 127) {
                 _object.append(String.format("(%s) Tj", _tagContents.substring(start, i)));
 
-                _object.append("q");
+                if (_tagContents.charAt(i) > 657) {
+                    _object.append("q");
 
-                Double fontSize = getValueAsDouble("font-size");
-                _object.append(String.format("%s %.1f Tf",
-                        Fonts.getInstance().getFontTag("Symbol"), fontSize));
+                    Double fontSize = getValueAsDouble("font-size");
+                    _object.append(String.format("%s %.1f Tf",
+                            Fonts.getInstance().getFontTag("Symbol"), fontSize));
 
-                if ((int) _tagContents.charAt(i) == 955) { // lambda
-                    _object.append(String.format("(%s) Tj", (char) 108));
-                } else if ((int) _tagContents.charAt(i) == 963) { // sigma
-                    _object.append(String.format("(%s) Tj", (char) 115));
-                } else { // plus minus
+                    if ((int) _tagContents.charAt(i) == 955) { // lambda
+                        _object.append(String.format("(%s) Tj", (char) 108));
+                    } else if ((int) _tagContents.charAt(i) == 963) { // sigma
+                        _object.append(String.format("(%s) Tj", (char) 115));
+                    }
+
+                    _object.append("Q");
+                    _tagContents.insert(i + 1, "  ");
+                }
+
+                if ((int) _tagContents.charAt(i) == 177) { // plus minus
                     _object.append("(\\261) Tj");
                 }
-                
-                start = i + 1;
 
-                _object.append("Q");
-                _tagContents.insert(i + 1, "  ");
+                start = i + 1;
             }
         }
 

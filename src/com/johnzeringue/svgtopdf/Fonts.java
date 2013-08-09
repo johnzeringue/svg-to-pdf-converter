@@ -2,6 +2,7 @@ package com.johnzeringue.svgtopdf;
 
 import com.johnzeringue.svgtopdf.objects.DictionaryObject;
 import com.johnzeringue.svgtopdf.objects.NameObject;
+import java.awt.Font;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,6 +44,22 @@ public class Fonts {
         }
 
         return _fontNames.get(font);
+    }
+
+    public NameObject getFontTag(Font font) {
+        String fontName = font.getFontName();
+        if (!STANDARD_14_FONTS.contains(fontName)) {
+            if (font.isBold()) {
+                fontName = "Helvetica-Bold";
+            } else {
+                fontName = "Helvetica";
+            }
+        }
+        if (!_fontNames.containsKey(fontName)) {
+            addFont(fontName);
+        }
+
+        return _fontNames.get(fontName);
     }
 
     public DictionaryObject getFontsDictionary() {
